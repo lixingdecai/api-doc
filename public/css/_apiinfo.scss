@@ -1,0 +1,217 @@
+#apiInfo {
+  .left-tree {
+    width: 240px;
+    overflow-y: auto;
+    overflow-x: auto;
+    float: left;
+    margin-top: 8px;
+    padding-left: 18px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    background-color: #eeeeee;
+
+    @at-root .ec-tree {
+      padding-left: 18px;
+      line-height: 16px;
+      margin-bottom: 5px;
+      cursor: default;
+    }
+    .page-item {
+      line-height: 16px;
+      margin-bottom: 5px;
+
+      label {
+        cursor: pointer;
+      }
+    }
+    .page-items {
+      padding-left: 15px;
+      line-height: 15px;
+
+      .active-current {
+        a {
+          color: #ee536e;
+        }
+        color: #ee536e;
+      }
+      .ec-tree {
+        margin-top: 10px;
+      }
+      div {
+        &:hover {
+          .edit-link {
+            visibility: visible;
+          }
+        }
+        .edit-link {
+          visibility: hidden;
+          margin-top: 5px;
+          display: inline-block;
+          margin-left: 5px;
+          cursor: pointer;
+          text-decoration: none !important;
+          color: #999 !important;
+        }
+      }
+    }
+  }
+  .right-content {
+    width: 895px;
+    overflow-x: hidden;
+    float: left;
+
+    .tool-btn-box {
+      margin-left: 18px;
+      margin-top: 10px;
+    }
+    h2 {
+      width: 648px;
+      margin: 24px 0 0 18px;
+      font-size: 20px;
+
+      span {
+        font-size: 14px;
+        color: #999;
+      }
+    }
+    h5 {
+      width: 648px;
+      margin: 24px 0 0 18px;
+      font-size: 14px;
+    }
+    .action-info {
+      margin-left: 15px;
+      margin-top: 10px;
+      clear: both;
+
+      &:after {
+        clear: both;
+      }
+      .item {
+        margin: 4px;
+        font-size: 12px;
+
+        b {
+          display: inline-block;
+          width: 60px;
+          position: relative;
+          float: left;
+        }
+        .crumb-select-item {
+          position: relative;
+          float: left;
+          height: 22px;
+          line-height: 22px;
+          border: 1px solid #DDD;
+          font-size: 12px;
+          vertical-align: top;
+          margin: 0 5px 5px 0;
+          padding: 0 26px 0 4px;
+          cursor: pointer;
+          background: #f3f3f3;
+
+          b {
+            font-weight: 400;
+            color: #333;
+          }
+          em {
+            color: #e4393c;
+          }
+          i {
+            display: block;
+            position: absolute;
+            width: 25px;
+            height: 22px;
+            right: 0;
+            top: 0;
+            background: url('//misc.360buyimg.com/product/search/1.0.0/css/i/search.ele.png') no-repeat 7px -140px;
+          }
+        }
+      }
+    }
+    .param-item {
+      clear: both;
+    }
+    table {
+      border: white 1px solid;
+      border-collapse: collapse;
+      margin: 12px 8px 8px 18px;
+      width: 100%;
+
+      tr {
+        .glyphicon-remove {
+          visibility: hidden;
+        }
+        .glyphicon-plus {
+          visibility: hidden;
+        }
+        &:hover {
+          .glyphicon-remove {
+            visibility: visible;
+          }
+          .glyphicon-plus {
+            visibility: visible;
+          }
+        }
+      }
+    }
+    .textarea-div {
+      margin: 12px 20px 8px 18px;
+      width: 100%;
+
+      textarea {
+        width: 875px;
+        height: 300px;
+        border-color: #eeeeee;
+      }
+    }
+  }
+  @at-root .active-item {
+    background-color: #ee536e;
+  }
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu > .dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  -webkit-border-radius: 0 6px 6px 6px;
+  -moz-border-radius: 0 6px 6px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover > .dropdown-menu {
+  display: block;
+}
+.dropdown-submenu > a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #ccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover > a:after {
+  border-left-color: #fff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left > .dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  -webkit-border-radius: 6px 0 6px 6px;
+  -moz-border-radius: 6px 0 6px 6px;
+  border-radius: 6px 0 6px 6px;
+}
+.dropdown-menu .disabled a, .dropdown-menu .disabled a:hover, .dropdown-menu .disabled a:focus {
+  color: #777;
+  cursor: not-allowed;
+}

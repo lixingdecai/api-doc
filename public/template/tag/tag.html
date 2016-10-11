@@ -1,0 +1,78 @@
+<div ng-include="'../template/_include/nav.html'" class="nav-header"></div>
+<div class="container" id="tagPage">
+    <div class="content-wrapper">
+        <div class="flash-container">
+        </div>
+        <div class="container-fluid container-limited">
+            <div class="content">
+                <div class="clearfix">
+                    <div class="gray-content-block top-block">
+                        <button ng-click="openModal()" class="pull-left btn btn-new">新建标签
+                        </button>
+                        <div class="oneline">
+                            &nbsp;&nbsp;
+                        </div>
+                    </div>
+                    <div class="labels">
+                        <ul class="content-list manage-labels-list" ng-repeat="tag in tagList track by $index">
+                            <li id="label_47">
+                                <a href="#"><span class="label color-label" style="background-color: #d9534f; color: #FFFFFF">{{tag.name}}</span></a>
+                                <div class="pull-right">
+                                    <a class="btn btn-sm" ng-click="openEditModal(tag._id)" href="javascript:void(0);">编辑</a>
+                                    <button class="btn btn-sm btn-remove remove-row" data-confirm="Remove this label? Are you sure?" data-method="delete" data-remote="true" ng-click="delete(tag._id)" rel="nofollow">删除</button>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="modal1" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">添加标签</h4>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="recipient-name" class="control-label">名称:</label>
+                        <input type="text" ng-model="newTag.name" class="form-control" id="recipient-name">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" ng-click="addTag()">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="editmodal1" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content"> 
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">编辑标签</h4>
+            </div>
+            <div class="modal-body">
+                <form>
+                <input type="hidden" ng-model="editTag._id" class="form-control">
+                <input type="hidden" ng-model="editTag.user" class="form-control">
+                    <div class="form-group">
+                        <label for="recipient-name" class="control-label">名称:</label>
+                        <input type="text" ng-model="editTag.name" class="form-control" id="recipient-name">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" ng-click="updateTag()">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+</div>

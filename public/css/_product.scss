@@ -1,0 +1,32 @@
+#productPage {
+  .version-content{
+    .title{
+      font-size: 18px;
+    }
+    .product-num {
+      margin: 0 10px;
+    }
+    .product-op{
+      display: inline-block;
+      float: right;
+      a {
+        text-decoration: none;
+        margin: 0 5px;
+      }
+    }
+    table {
+      tr {
+        td {
+          border-top: none;
+          text-align: center;
+          &:last-child{
+            text-align: right;
+          }
+        }
+      }
+    }
+    hr{
+      margin: 10px 0;
+    }
+  }
+}

@@ -1,0 +1,52 @@
+<div ng-include="'../template/_include/nav.html'" class="nav-header"></div>
+<div class="container">
+    <div class="box-con clearfix">
+        <div class="box" data-projid="6556" ng-click="apiInfo(project._id)" data-teamid="3142" ng-repeat="project in projectList track by $index">
+            <div class="info">
+                <div class="title">{{project.name}}</div>
+                <div class="intro">{{project.domain}}</div>
+                <div class="intro">{{project.description}}</div>
+            </div>
+            <div class="status">1 周 前更新<span class="creator">@李姓的菜</span></div>
+            <div class="tools">
+                <i class="glyphicon glyphicon-pencil" ></i>
+                <i class="glyphicon glyphicon-export"  title="复制RAP插件地址"></i>
+                <i class="glyphicon glyphicon-eye-open" ></i>
+                <i class="glyphicon glyphicon-trash" ></i>
+            </div>
+            <input type="hidden" class="accounts-hidden" value="">
+        </div>
+        <div class="box-to-add" ng-click="openModal()">
+        </div>
+    </div>
+</div>
+<div id="modal1" class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="exampleModalLabel">添加项目</h4>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <label for="recipient-name" class="control-label">项目名称:</label>
+            <input type="text" ng-model="newProject.name" class="form-control" id="recipient-name">
+          </div>
+          <div class="form-group">
+            <label for="recipient-name" class="control-label">项目域名:</label>
+            <input type="text" ng-model="newProject.domain" class="form-control" id="recipient-name">
+          </div>
+          <div class="form-group">
+            <label for="message-text" class="control-label">说明:</label>
+            <textarea class="form-control" ng-model="newProject.decription" id="message-text"></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+        <button type="button" class="btn btn-primary" ng-click="addProject()">保存</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,112 @@
+.login_m {
+  height: 375px;
+  margin: 98px auto 0;
+  width: 403px;
+}
+.login_logo {
+  margin-bottom: 25px;
+  text-align: center;
+}
+.login_boder {
+  // background: rgba(0, 0, 0, 0) url("../../src/images/login_m_bg.png") no-repeat scroll 0 0;
+  height: 302px;
+  background-size: 100% 380px;
+  overflow: hidden;
+  width: 100%;
+  border: 1px solid #eeeeee;
+  -moz-box-shadow: 10px 10px 5px #888888; /* 老的 Firefox */
+  box-shadow: 10px 10px 5px #888888;
+}
+.login_padding {
+  padding: 28px 47px 20px;
+}
+.login_boder h2 {
+  color: #4f5d80;
+  font-size: 12px;
+  font-weight: normal;
+  margin-bottom: 11px;
+  text-transform: uppercase;
+}
+.forget_model_h2 {
+  color: #4f5d80;
+  font-size: 12px;
+  font-weight: normal;
+  margin-bottom: 11px;
+}
+.login_boder input.txt_input {
+  // background: rgba(0, 0, 0, 0) url("../images/txt_input_bg.gif") no-repeat scroll 0 0;
+  border: 1px solid #cad2db;
+  border-radius: 5px;
+  color: #717171;
+  font-family: Arial;
+  font-size: 14px;
+  height: 36px;
+  line-height: 36px;
+  margin-bottom: 10px;
+  padding: 0 5px;
+  width: 295px;
+}
+.login_boder input.txt_input2 {
+  margin-bottom: 20px;
+}
+.login_boder input.txt_input:focus {
+  border: 1px solid #6192c8;
+  box-shadow: 0 0 8px rgba(173, 173, 173, 0.5);
+  outline: medium none;
+  transition: border 0.2s linear 0s, -moz-box-shadow 0.2s linear 0s;
+}
+.login_boder p.forgot {
+  font-size: 11px;
+  margin-bottom: 15px;
+  text-align: right;
+}
+.login_boder p.forgot a, .login_boder p.forgot a:visited {
+  color: #8c8e91;
+}
+.login_boder p.forgot a:hover {
+  color: #206fd5;
+}
+.rem_sub input.sub_button {
+  border: medium none;
+  color: #fff;
+  float: right;
+  font-size: 14px;
+  font-weight: bold;
+  height: 32px;
+  padding-bottom: 2px;
+  width: 122px;
+}
+.rem_sub > label {
+  float: right;
+}
+.rem_sub input.sub_buttons:hover {
+  background-position: -153px -882px;
+  cursor: pointer;
+}
+.rem_sub input.sub_button:hover {
+  background-position: -153px -882px;
+  cursor: pointer;
+}
+.rem_sub .rem_sub_l {
+  float: left;
+  font-size: 12px;
+  height: 33px;
+  line-height: 33px;
+}
+.rem_sub input#checkbox {
+  margin-right: 5px;
+  vertical-align: middle;
+}
+.focusBox {
+  height: 513px;
+}
+.focusContentBox {
+  height: 100%;
+}
+.focusContent {
+  float: left;
+  width: 1000px;
+}
+.copyrights {
+  clear: both;
+}

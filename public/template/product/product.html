@@ -1,0 +1,110 @@
+<div ng-include="'../template/_include/nav.html'" class="nav-header"></div>
+<div class="container" id="productPage">
+    <div class="add-area">
+        <button type="button" ng-click="openProductModal()" class="btn btn-primary">添加产品</button>
+    </div>
+    <div class="version-content">
+        <div ng-repeat="product in productList track by $index">
+            <div>
+                <label class="title">{{product.name}}</label><span class="product-num"> 版本数量：{{product.productVersions.length}}</span>
+                <div class="product-op"> <a ng-click="delete(product._id)"><span class="glyphicon glyphicon-trash"></span>删除</a>
+                    <a ng-click="openVersionModal(product._id,$index)"><span class="glyphicon glyphicon-plus"></span>添加版本</a>
+                    <a class="show-products" ng-init="showVersions[$index] = false" ng-click="showProducts($index)">展开版本<span class="glyphicon glyphicon-chevron-down"></span></a></div>
+            </div>
+            <hr/>
+            <div ng-if="showVersions[$index]">
+                <table class="table">
+                    <tr ng-repeat="version in product.productVersions">
+                        <td >{{version.name}}</td>
+                        <td >接口数量：100</td>
+                        <td >{{version.updateAt | date:'yyyy-MM-dd HH:mm' }}</td>
+                        <td >  
+                            <a ng-click="deleteVersion(version._id)"><span class="glyphicon glyphicon-trash"></span>删除</a>
+                            <a ng-click="editVersionModal(version._id)"><span class="glyphicon glyphicon-edit"></span>编辑</a>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<!--begin 新增产品线 -->
+<div id="versionModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="">添加产品线</h4>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="recipient-name" class="control-label">当前版名称:</label>
+                        <input type="text" ng-model="newVersion.name" class="form-control">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" ng-click="addVersion(currIndex)">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--end 新增产品线 -->
+
+<!--begin 编辑产品线 -->
+<div id="editversionModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="">添加产品线</h4>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <input type="hidden" ng-model="editVersion.mark" class="form-control">
+                    <div class="form-group">
+                        <label for="recipient-name" class="control-label">当前版名称:</label>
+                        <input type="text" ng-model="editVersion.name" class="form-control">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" ng-click="updateVersion()">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--end 编辑产品线 -->
+
+
+<!--begin 新增产品 -->
+<div id="productModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">添加产品</h4>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="recipient-name" class="control-label">产品名称:</label>
+                        <input type="text" ng-model="newProduct.name" class="form-control" id="recipient-name">
+                    </div>
+                    <!--  <div class="form-group">
+                        <label for="recipient-name" class="control-label">当前版本号:</label>
+                        <input type="text" ng-model="newProduct.description" class="form-control" id="recipient-name">
+                    </div> -->
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" ng-click="addProduct()">保存</button>
+            </div>
+        </div>
+    </div>
+    <!--end 新增产品 -->

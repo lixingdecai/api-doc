@@ -1,0 +1,90 @@
+.content-wrapper {
+    min-height: 100vh;
+    width: 100%;
+    padding: 20px;
+    background: #EAEBEC;
+}
+.container-fluid {
+    margin-right: auto;
+    margin-left: auto;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+.content-wrapper .container-fluid {
+    background: #FFF;
+    padding: 16px;
+    min-height: 90vh;
+}
+.container-limited {
+    max-width: 1200px;
+}
+
+.content-block, .gray-content-block {
+    margin: -16px;
+    background-color: #f7f8fa;
+    padding: 16px;
+    margin-bottom: 0px;
+    border-top: 1px solid #dce0e6;
+    border-bottom: 1px solid #dce0e6;
+    color: #7f8fa4;
+}
+
+.content-block.top-block, .gray-content-block.top-block {
+    border-top: none;
+}
+ul, ol {
+    margin-top: 0;
+    margin-bottom: 10.5px;
+}
+ul.content-list {
+    margin: 5px 0px;
+    padding: 0px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+ul.content-list>li {
+    padding: 10px 0;
+    border-bottom: 1px solid #EEE;
+    display: block;
+    margin: 0px;
+}
+ul.content-list>li {
+    padding: 16px;
+    border-color: #eef0f2;
+    margin-left: -16px;
+    margin-right: -16px;
+    color: #7f8fa4;
+}
+a {
+    background-color: transparent;
+}
+a {
+    color: #333c48;
+    text-decoration: none;
+}
+.manage-labels-list .label, .manage-labels-list .shortcut-mappings .key, .shortcut-mappings .manage-labels-list .key {
+    padding: 9px;
+    font-size: 14px;
+}
+.color-label {
+    padding: 3px 4px;
+}
+.btn.btn-danger, .btn.btn-remove, .btn.btn-red {
+    background-color: #f43263;
+    border-color: #e52c5a;
+    color: white;
+}
+.btn.btn-success, .btn.btn-new, .btn.btn-create, .btn.comment-btn, .btn.btn-save, .btn.btn-green {
+    background-color: #31af64;
+    border-color: #2faa60;
+    color: white;
+}
+.content-block .oneline, .gray-content-block .oneline {
+    line-height: 42px;
+}
+.pull-right, #modal_merge_info .modal-dialog .btn-clipboard {
+    float: right;
+}
+
+

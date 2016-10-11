@@ -1,0 +1,51 @@
+<div ng-include="'../template/_include/nav.html'" class="nav-header"></div>
+<div class="container">
+    <div class="add-area">
+      <button type="button" ng-click="openModal()" class="btn btn-primary">添加</button>
+    </div>
+    <table class="table table-bordered" >
+      <thead>
+        <tr>
+          <th>用户名</th>
+          <th>email</th>
+          <th>操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="user in userList track by $index">
+          <td>{{user.name}}</td>
+          <td>{{user.email}}</td>
+          <td><a ng-click="delete($index,user._id)">删除</a></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div id="modal1" class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="exampleModalLabel">添加用户</h4>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <label for="recipient-name" class="control-label">用户名:</label>
+            <input type="text" ng-model="newUser.name" class="form-control" id="recipient-name">
+          </div>
+          <div class="form-group">
+            <label for="recipient-name" class="control-label">email:</label>
+            <input type="text" ng-model="newUser.email" class="form-control" id="recipient-name">
+          </div>
+          <div class="form-group">
+            <label for="message-text" class="control-label">密码:</label>
+            <input class="form-control" ng-model="newUser.password" id="message-text">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+        <button type="button" class="btn btn-primary" ng-click="addUser()">保存</button>
+      </div>
+    </div>
+</div>

@@ -1,0 +1,14 @@
+{
+  "apps": [{
+    "name": "apidoc",
+    "script": "bin/www",
+    "exec_mode": "cluster",
+    "instances": 2,
+    "env": {
+      "NODE_ENV": "production",
+      "PORT": 3002
+    },
+    "merge_logs": true,
+    "log_date_format": "YYYY-MM-DD HH:mm Z",
+  }]
+}

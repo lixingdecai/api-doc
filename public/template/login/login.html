@@ -1,0 +1,47 @@
+<div class="login_m">
+    <div class="login_logo"><img width="196" height="80" src="http://oa.meiyou.com/appearance/images/logo@2x.png"></div>
+    <form class="login_box" ng-submit="login()" name="validForm" novalidate>
+    <div class="login_boder">
+        <div id="login_model" class="login_padding">
+            <h2>用户名</h2>
+            <label>
+                <input type="text" class="txt_input txt_input2" id="username" ng-model="userInfo.name">
+            </label>
+            <h2>密码</h2>
+            <label>
+                <input type="password" class="txt_input" id="userpwd" name="textfield2" ng-model="userInfo.password">
+            </label>
+            <p class="forgot"><a href="javascript:void(0);" id="iforget">忘记密码?</a></p>
+            <div class="rem_sub">
+                <div class="rem_sub_l">
+                    <input type="checkbox" id="save_me" name="checkbox">
+                    <label for="checkbox">Remember me</label>
+                </div>
+                <label>
+                    <input type="submit" value="登录" id="button" name="button" class="btn">
+                </label>
+            </div>
+        </div>
+        <div class="copyrights" >Collect from <a href="www.meetyou.com">美柚</a></div>
+        <div style="display:none" class="login_padding" id="forget_model">
+            <br>
+            <h1>Forgot password</h1>
+            <br>
+            <div class="forget_model_h2">(Please enter your registered email below and the system will automatically reset users’ password and send it to user’s registered email address.)</div>
+            <label>
+                <input type="text" class="txt_input txt_input2" id="usrmail">
+            </label>
+            <div class="rem_sub">
+                <div class="rem_sub_l">
+                </div>
+                <label>
+                    <input type="submit" style="opacity: 0.7;" value="Retrieve now" id="Retrievenow" name="button" class="sub_buttons"> &#12288;&#12288;&#12288;
+                    <input type="submit" style="opacity: 0.7;" value="Return" id="denglou" name="button" class="sub_button">&#12288;&#12288;
+                </label>
+            </div>
+        </div>
+        <!--login_padding  Sign up end-->
+    </div>
+    </form>
+    <!--login_boder end-->
+</div>
