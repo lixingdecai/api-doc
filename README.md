@@ -8,8 +8,8 @@
   痛点：传统接口交互都是根据技术聊天信息或者简易文本交流,没有一个具体存放和管理的地方。前端、后端、需求或者测试都会很容易出些各种扯皮 和互相等待的情况。极度浪费时间和降低开发效率。  
   场景：在需求确立 建立模型后，前端 后端人员能根据在线文档并行开发。并对接口做统一的记录和管理，免除不必要扯皮和等待，提高开发效率。  
 
-##截屏
-    ![](https://github.com/lixingdecai/api-doc/raw/master/public/images/ScreentShot1.png)
+##网页截屏
+![接口详情](https://github.com/lixingdecai/api-doc/raw/master/public/images/ScreentShot1.png)
 
 ##技术栈
 
