@@ -29,3 +29,6 @@ require('./service/product/productService.js');
 require('./controller/product/productCtrl.js');
 require('./controller/tag/tagCtrl.js');
 require('./service/tag/tagService.js');
+require('./controller/mock/mockCtrl.js');
+require('./service/mock/mockService.js');
+require('./utils/utils.js');

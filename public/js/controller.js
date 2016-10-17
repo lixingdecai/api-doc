@@ -1,4 +1,4 @@
-const angular = require('angular');
+// const angular = require('angular');
 angular.module('start.controllers', [])
   .controller('MainCtrl', ['$rootScope', '$scope', '$state', 'loginService', function($scope, $rootScope, $state, loginService) {
     // $rootScope.showNav = true;
@@ -20,30 +20,4 @@ angular.module('start.controllers', [])
         () => console.log('退出失败')
       );
     }
-  }])
-  .factory('httpInterceptor', ['$q', '$injector', '$rootScope', function($q, $injector, $rootScope) {
-    var httpInterceptor = {
-      request: function(config) {
-        $rootScope.loading = true;
-        // config.requestTimestamp = new Date().getTime();
-        return config;
-      },
-      'responseError': function(response) {
-        if (response.status == 401) {
-          // var rootScope = $injector.get('$rootScope');
-          // var state = $injector.get('$rootScope').$state.current.name;
-          // rootScope.stateBeforLogin = state;
-          // rootScope.$state.go("login");
-          return $q.reject(response);
-        } else if (response.status === 404) {
-          alert("404!");
-          return $q.reject(response);
-        }
-      },
-      'response': function(response) {
-        // $rootScope.loading = false;
-        return response;
-      }
-    }
-    return httpInterceptor;
   }]);

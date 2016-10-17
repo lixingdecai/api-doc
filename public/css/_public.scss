@@ -14,6 +14,20 @@
     z-index: 1000;
 }
 
+.glyphicon-refresh-animate {
+    animation: spin .7s infinite linear;
+}
+
+input.error,textarea.error{
+  border-color: #a94442;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+  box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+} 
+
+form .error{
+  color: #a94442;
+}
+
 .spinner > div {
   background-color: #67CF22;
   height: 100%;

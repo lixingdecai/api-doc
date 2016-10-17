@@ -632,6 +632,82 @@ angular.module('apiInfo.services', [])
       return promise;
     };
 
+    // parameter 解析成层级结构modal
+    var parseParam = (paramList, resultList) => {
+      var pil = [];
+      var plist = paramList.parameterList;
+      if (!plist) {
+        return;
+      }
+      var pl = plist.length;
+      for (var i = 0; i < pl; i += 1) {
+        // parentsIdList.push(paramList.id);
+        // if (parentsIdList) {
+        //   for (var ppid in parentsIdList) {
+        //     pil.push(parentsIdList[ppid]);
+        //   }
+        // }
+        // pil.push(paramList.id);
+        // plist[i].parentsIdList = pil;
+        resultList.push(plist[i]);
+        if (plist[i].parameterList && plist[i].parameterList.length > 0) {
+          parseParam(plist[i], resultList, pil);
+        }
+      }
+    };
+    // 获取parameter转化成页面modal
+    interfaceListService.switchA = (acId) => {
+      var ca = interfaceListService.getAction(acId);
+      // console.log(ca);
+      var param = {};
+      // if (!param) {
+      //   param = {};
+      // }
+      param.requestParameter = [];
+      param.requestHeader = [];
+      param.requestData = [];
+      param.responseData = [];
+      if (ca === null) return null;
+      if (ca.requestParameterList) {
+        let rpl = ca.requestParameterList.length;
+        for (let i = 0; i < rpl; i += 1) {
+          ca.requestParameterList[i].parentsIdList = [];
+          param.requestParameter.push(ca.requestParameterList[i]);
+          parseParam(ca.requestParameterList[i], param.requestParameter, []);
+        }
+        // ca.requestParameterList = requestParameter;
+      }
+      if (ca.requestDataList) {
+        let rpl = ca.requestDataList.length;
+        for (let i = 0; i < rpl; i += 1) {
+          ca.requestDataList[i].parentsIdList = [];
+          param.requestData.push(ca.requestDataList[i]);
+          parseParam(ca.requestDataList[i], param.requestData, []);
+        }
+        // ca.requestDataList = requestData;
+      }
+      if (ca.requestHeaderList) {
+        let rpl = ca.requestHeaderList.length;
+        for (let i = 0; i < rpl; i += 1) {
+          ca.requestHeaderList[i].parentsIdList = [];
+          param.requestHeader.push(ca.requestHeaderList[i]);
+          parseParam(ca.requestHeaderList[i], param.requestHeader, []);
+        }
+        // ca.requestHeaderList = requestHeader;
+      }
+      if (ca.responseDataList) {
+        var rpl = ca.responseDataList.length;
+        for (let i = 0; i < rpl; i += 1) {
+          ca.responseDataList[i].parentsIdList = [];
+          param.responseData.push(ca.responseDataList[i]);
+          parseParam(ca.responseDataList[i], param.responseData, []);
+        }
+        // ca.responseDataList = responseData;
+      }
+      ca.param = param;
+      return ca;
+    };
+
     interfaceListService.removePage = (pageId) => {
       const deferred = $q.defer();
       const promise = deferred.promise;
@@ -670,6 +746,50 @@ angular.module('apiInfo.services', [])
           deferred.resolve(data);
         } else {
           deferred.reject(data.error);
+        }
+      }).error((error) => {
+        deferred.reject(error);
+      });
+      return promise;
+    };
+
+    /**
+     * [getApiById 根据id获取api]
+     * @param  {[type]} apid [description]
+     * @return {[type]}      [description]
+     */
+    interfaceListService.getApiById = (apid) => {
+      const deferred = $q.defer();
+      const promise = deferred.promise;
+      $http.get('/api/' + apid).success((result) => {
+        data = result.response;
+        if (result.status === 'success') {
+          if (!data.requestParameter) {
+            data.requestParameterList = [];
+          } else {
+            data.requestParameterList = JSON.parse(data.requestParameter);
+          }
+
+          if (!data.requestHeader) {
+            data.requestHeaderList = [];
+          } else {
+            data.requestHeaderList = JSON.parse(data.requestHeader);
+          }
+
+          if (data.requestData) {
+            data.requestDataList = [];
+          } else {
+            data.requestDataList = JSON.parse(data.requestData);
+          }
+
+          if (!data.responseData) {
+            data.responseDataList = [];
+          } else {
+            data.responseDataList = JSON.parse(data.responseData);
+          }
+          deferred.resolve(data);
+        } else {
+          deferred.reject(result.error);
         }
       }).error((error) => {
         deferred.reject(error);
@@ -753,7 +873,6 @@ angular.module('apiInfo.services', [])
         //根节点
         return obList.length + 1 + '';
       }
-
     }
 
     // 统计层级

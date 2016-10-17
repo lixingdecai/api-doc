@@ -4,14 +4,15 @@
 // require('angular-moment');
 // require('angular-bootstrap-datetimepicker');
 const vimtAPP = angular.module('vimt', ['ui.router', 'ui.bootstrap.datetimepicker',
-  'start.controllers',
+  'start.controllers', 'utils',
   'apiList.controllers', 'apiList.services',
   'login.controllers', 'login.services',
   'project.controllers', 'project.services',
   'apiInfo.controllers', 'apiInfo.services',
   'user.controllers', 'user.services',
   'product.controllers', 'product.services',
-  'tag.controllers', 'tag.services'
+  'tag.controllers', 'tag.services',
+  'mock.controllers', 'mock.services'
 ]);
 // vimtAPP.constant('moment', require('moment-timezone'));
 vimtAPP.run(['$rootScope', ($rootScope, $location, $state) => {
@@ -77,5 +78,9 @@ vimtAPP.config(['$stateProvider', '$urlRouterProvider', '$httpProvider', functio
     url: '/tag',
     templateUrl: '../template/tag/tag.html',
     controller: 'tagCtrl'
+  }).state('mock', {
+    url: '/mock/:apiId',
+    templateUrl: '../template/mock/mock.html',
+    controller: 'mockCtrl'
   });
 }]);

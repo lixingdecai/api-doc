@@ -84,7 +84,7 @@
                 <span class="product-lable">{{api.project.name}}</span>
                 <label class="product-tags">{{api.tags}}</label>
                 <div class="api-item-op">
-                    <a data-toggle="tooltip" data-placement="删除" title="删除"><span class="glyphicon glyphicon-trash"></span></a>
+                    <a data-toggle="tooltip" ng-click="search();$event.stopPropagation();" data-placement="删除" title="删除"><span class="glyphicon glyphicon-trash"></span></a>
                     <a class="show-products" ng-if="api.favourite" ng-click="toggleFavorite(api._id,true)" data-toggle="tooltip" data-placement="已订阅" title="已订阅">
                         <span class="glyphicon glyphicon-star"></span>
                     </a>

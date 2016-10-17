@@ -87,7 +87,7 @@
           </div>
         </div>
       </div>
-      <div ng-if="param.requestParameter.length > 0 || isEdit" class="param-item">
+      <div ng-if="currentAction.param.requestParameter.length > 0 || isEdit" class="param-item">
         <h2>请求参数列表<button class="btn btn-info btn-xs" ng-click="addParam('reqParam')" ng-if="isEdit">添加参数</button><button class="btn btn-danger btn-xs" ng-click="importJson('reqParam')" ng-if="isEdit">导入json</button></h2>
         <table class="table table-striped">
           <tbody>
@@ -98,7 +98,7 @@
               <td class="head-type">类型</td>
               <td class="head-remark">备注</td>
             </tr>
-            <tr class="tr-param" ng-repeat="rp in param.requestParameter track by $index">
+            <tr class="tr-param" ng-repeat="rp in currentAction.param.requestParameter track by $index">
               <td class="expander">
                 <div class="div-op-container" ng-if="isEdit">
                   <a ng-click="removeParam(rp.id, 'reqParam')"><i class="glyphicon glyphicon-remove"></i></a>
@@ -131,7 +131,7 @@
           </tbody>
         </table>
       </div>
-      <div ng-if="param.requestData.length > 0 || isEdit" class="param-item">
+      <div ng-if="currentAction.param.requestData.length > 0 || isEdit" class="param-item">
         <h2>请求数据列表<button class="btn btn-info btn-xs" ng-click="addParam('reqData')" ng-if="isEdit">添加参数</button><button class="btn btn-danger btn-xs" ng-click="importJson('reqData')" ng-if="currentAction.requestDataType =='raw' && isEdit">导入json</button></h2>
         <h5><div ng-if="!isEdit">请求数据类型：{{currentAction.requestDataType}}</div></h5>
         <div class="RadioGroup" ng-if="isEdit">
@@ -155,7 +155,7 @@
               <td class="head-type">类型</td>
               <td class="head-remark">备注</td>
             </tr>
-            <tr class="tr-param" ng-repeat="rp in param.requestData track by $index">
+            <tr class="tr-param" ng-repeat="rp in currentAction.param.requestData track by $index">
               <td class="expander">
                 <div class="div-op-container" ng-if="isEdit">
                   <a ng-click="removeParam(rp.id, 'reqData')"><i class="glyphicon glyphicon-remove"></i></a>
@@ -187,7 +187,7 @@
           </tbody>
         </table>
       </div>
-      <div ng-if="param.responseData.length > 0 || isEdit" class="param-item">
+      <div ng-if="currentAction.param.responseData.length > 0 || isEdit" class="param-item">
         <h2>响应参数列表<button class="btn btn-info btn-xs" ng-click="addParam('resData')" ng-if="isEdit">添加参数</button><button class="btn btn-danger btn-xs" ng-click="importJson('resData')" ng-if="isEdit">导入json</button></h2>
         <table class="table">
           <tbody>
@@ -198,7 +198,7 @@
               <td class="head-type">类型</td>
               <td class="head-remark">备注</td>
             </tr>
-            <tr class="tr-param" ng-repeat="rp in param.responseData track by $index">
+            <tr class="tr-param" ng-repeat="rp in currentAction.param.responseData track by $index">
               <td class="expander">
                 <div class="div-op-container" ng-if="isEdit">
                   <a ng-click="removeParam(rp.id, 'resData')"><i class="glyphicon glyphicon-remove"></i></a>
@@ -230,7 +230,7 @@
           </tbody>
         </table>
       </div>
-      <div ng-if="param.requestHeader.length > 0 || isEdit" class="param-item">
+      <div ng-if="currentAction.param.requestHeader.length > 0 || isEdit" class="param-item">
         <h2>请求头<button class="btn btn-info btn-xs" ng-click="addParam('reqHeader')" ng-if="isEdit">添加参数</button><button class="btn btn-danger btn-xs" ng-click="importJson('reqHeader')" ng-if="isEdit">导入json</button></h2>
         <table class="table">
           <tbody>
@@ -241,7 +241,7 @@
               <td class="head-type">类型</td>
               <td class="head-remark">备注</td>
             </tr>
-            <tr class="tr-param" ng-repeat="rp in param.requestHeader track by $index">
+            <tr class="tr-param" ng-repeat="rp in currentAction.param.requestHeader track by $index">
               <td class="expander">
                 <div class="div-op-container" ng-if="isEdit">
                   <a ng-click="removeParam(rp.id, 'reqHeader')"><i class="glyphicon glyphicon-remove"></i></a>

@@ -7,6 +7,10 @@ const fields = {
   domain: String, // 域名
   description: String, // 说明
   author: String,
+  mark: {
+    type: Number,
+    default: 0
+  },
   createAt: {
     type: Date,
     default: Date.now

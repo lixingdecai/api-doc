@@ -105,7 +105,7 @@ exports.getAllByProjectId = (req, res) => {
 };
 
 exports.getAll = (req, res) => {
-  Api.find({}, findAllProjection).then(
+  Api.find({mark: 0}, findAllProjection).then(
     apis => tools.responseSuccess(res, apis),
     err => tools.responseFailure(res, err)
   );

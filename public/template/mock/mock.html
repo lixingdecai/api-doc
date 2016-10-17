@@ -1,0 +1,94 @@
+<div ng-include="'../template/_include/nav.html'" class="nav-header"></div>
+<div class="container" id="mockPage">
+  <div id="divActionList" class="demo tabs">
+    <div id="divRootSetting">
+        <label style="color:#666;display: inline; margin-right: 5px;" for="txtRootPath">
+            请求根路径
+        </label>
+        <input class="form-control" id="txtRootPath" type="text" style="width:300px;" value="">
+    </div>
+    <br>
+    <ul class="nav nav-tabs" role="tablist">
+      <li class="active">
+        <a role="tab" data-toggle="tab" href="#header">Header</a>
+      </li>
+      <li>
+        <a role="tab" data-toggle="tab" href="#sss">Params</a>
+      </li>
+      <li>
+        <a role="tab" data-toggle="tab">Body</a>
+      </li>
+    </ul>
+    <div class="tab-content">
+      <div class="tab-pane fade in active" id="header">
+        <form name="form1" class="form" method="post">
+          <input type="hidden" name="paramIdList" class="paramIdList" value="resParam2222">
+          <div class="p8">
+            <div style="margin-top:5px;">请求标识:
+              <span style="color:#990000;">54364</span>
+            </div>
+            <div style="margin-top:5px;">请求地址: /www/1</div>
+          </div>
+          <div class="clearfix">
+            <div>
+              <span class="name">dd</span><input type="text" style="width:100px" class="field" name="dd">
+              <span class="remark">
+                <span style="font-size: 12px;">说明</span>
+                <div class="detail">
+                  <div>- 变量名：</div>
+                  <div>- 备注：</div>
+                </div>
+              </span>
+            </div>
+            <div class="p8 tools">
+              <input type="button" class="btn btn-primary btn-run" value="请求">
+            </div>
+          </form>
+        </div>
+        <div class="tab-pane fade" id="sss">
+          <form
+            name="form3"
+            class="form"
+            method="post"
+          >
+            <input
+              type="hidden"
+              name="paramIdList"
+              class="paramIdList"
+              value="gg,ff-faker,aa,,hh-faker,dd,dd-faker,bb,bb-obj,str,aa,aa-list|2,aa-list-num,dd,dd-faker,cc,cc-num,gg,ff-faker,bb,bb-obj,str,ff,ee-faker,ff,ee-faker,ff,ee-faker,cc,cc-num,gg,ff-faker,bb,bb-obj,str,hh,hh-faker,hh,hh-faker,ii,ii-faker,bb,bb-obj,str,gg,ff-faker,cc,cc-num,hh,hh-faker,cc,cc-num,aa,23sdf,aa-list-num,aa,hh-faker,,ff,ee-faker,dd,dd-faker,dd,dd-faker,ff,ee-faker,cc,cc-num,dd,dd-faker,gg,ff-faker,ii,bb,bb-obj,str,ii,bb,bb-obj,str,aa,23sdf,aa-list-num,ii,ii-faker,bb,bb-obj,str,ii,ii-faker,aa,aa-list|2,aa-list-num,aa,23sdf,aa-list-num">
+            <div class="p8">
+              <div style="margin-top:5px;">请求标识:
+                <span style="color:#990000;">54366</span>
+              </div>
+              <div style="margin-top:5px;">请求地址: plan/add</div>
+            </div>
+            <div class="clearfix">
+              <div>
+                <span class="name"></span><input type="text" style="width:100px" class="field" name="">
+                <span class="remark">
+                  <span style="font-size: 12px;">说明</span>
+                  <div class="detail">
+                    <div>- 变量名：</div>
+                    <div>- 备注：</div>
+                  </div>
+                </span>
+              </div>
+              <div>
+                <span class="name"></span><input type="text" style="width:100px" class="field" name="">
+                <span class="remark">
+                  <span style="font-size: 12px;">说明</span>
+                  <div class="detail">
+                    <div>- 变量名：</div>
+                    <div>- 备注：</div>
+                  </div>
+                </span>
+              </div>
+            </div>
+            <div class="p8 tools">
+              <input type="button" class="btn btn-primary btn-run" value="请求">
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>

@@ -29,6 +29,37 @@ angular.module('product.services', []).factory('productService', ($http, $q) => 
     });
     return promise;
   };
+  
+  productService.pageList = (page) => {
+    const deferred = $q.defer();
+    const promise = deferred.promise;
+    $http.get('/productPageList/'+page.pageSize+'/'+page.currPage).success((data) => {
+      if (data.status === 'success') {
+        deferred.resolve(data.response);
+      } else {
+        deferred.reject(data.error);
+      }
+    }).error((error) => {
+      deferred.reject(error);
+    });
+    return promise;
+  };
+
+  productService.totalCount = () => {
+    const deferred = $q.defer();
+    const promise = deferred.promise;
+    $http.get('/productTotalCount').success((data) => {
+      if (data.status === 'success') {
+        deferred.resolve(data.response);
+      } else {
+        deferred.reject(data.error);
+      }
+    }).error((error) => {
+      deferred.reject(error);
+    });
+    return promise;
+  };
+
   productService.getVersionsByProductId = (productId) => {
     const deferred = $q.defer();
     const promise = deferred.promise;
@@ -71,7 +102,20 @@ angular.module('product.services', []).factory('productService', ($http, $q) => 
     });
     return promise;
   };
-
+  productService.getProductByName = (name) => {
+    const deferred = $q.defer();
+    const promise = deferred.promise;
+    $http.get('/getProductByName/' + name).success((data) => {
+      if (data.status === 'success') {
+        deferred.resolve(data.response);
+      } else {
+        deferred.reject(data.error);
+      }
+    }).error((error) => {
+      deferred.reject(error);
+    });
+    return promise;
+  };
   productService.getVersion = (id) => {
     const deferred = $q.defer();
     const promise = deferred.promise;
@@ -86,7 +130,6 @@ angular.module('product.services', []).factory('productService', ($http, $q) => 
     });
     return promise;
   };
-
   productService.createVersion = (version) => {
     const deferred = $q.defer();
     const promise = deferred.promise;

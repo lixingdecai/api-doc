@@ -5,6 +5,7 @@ const fields = {
   name: String,
   email: String,
   password: String,
+  mark: {type: Number, default: 0},
   createAt: { type: Date, default: Date.now },
   updateAt: { type: Date, default: Date.now }
 };
