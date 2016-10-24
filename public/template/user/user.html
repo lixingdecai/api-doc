@@ -20,7 +20,7 @@
       </tbody>
     </table>
 
-    <div class="pagination pagination-small" id="pager">
+    <div class="pagination pagination-small" id="pager" ng-if="page.totalPage != 0">
             <ul class="pagination pagination-sm">
                 <li ng-click="changePage(1)" ng-class="{'disabled':page.currPage == 1}"><a>首页</a></li>
                 <li ng-click="changePage(page.currPage - 1)" ng-class="{'disabled':page.currPage == 1}"><a>上一页</a></li>

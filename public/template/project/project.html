@@ -9,9 +9,8 @@
             </div>
             <div class="status">1 周 前更新<span class="creator">@李姓的菜</span></div>
             <div class="tools">
-                <i class="glyphicon glyphicon-pencil" ></i>
-                <i class="glyphicon glyphicon-export"  title="复制RAP插件地址"></i>
-                <i class="glyphicon glyphicon-eye-open" ></i>
+                <i ng-click="apiInfoEdit(project._id)" class="glyphicon glyphicon-pencil" ></i>
+                <i ng-click="apiInfo(project._id)" class="glyphicon glyphicon-eye-open" ></i>
                 <i ng-click="delete(project._id)" class="glyphicon glyphicon-trash" ></i>
             </div>
             <input type="hidden" class="accounts-hidden" value="">

@@ -51,7 +51,19 @@ angular.module('project.controllers', []).controller('projectCtrl', function ($s
     console.log('跳转接口信息！');
     $state.go('apiInfo', {
       projectId: projectId
-      , actionId: 0
+      , actionId: 0,
+      editFlag: 0
     });
   };
+
+  $scope.apiInfoEdit = (projectId) => {
+    console.log('跳转编辑接口信息！');
+    $state.go('apiInfo', {
+      projectId: projectId,
+      actionId: 0,
+      editFlag: 1
+    });
+  };
+
+
 });

@@ -27,7 +27,9 @@ angular.module('tag.controllers', []).controller('tagCtrl', function ($scope, $s
     for (var i = $scope.page.showStart; i <= $scope.page.showEnd; i++) {
       $scope.page.showPages.push(i);
     }
-    $scope.page.showPages.push('...');
+    if ($scope.page.totalPage > $scope.page.currPage && ($scope.page.currPage + 5 < $scope.page.totalPage)) {
+      $scope.page.showPages.push('...');
+    }
   }
   $scope.changePage = (currPage) => {
     var patrn = /^\d*$/;
@@ -60,7 +62,6 @@ angular.module('tag.controllers', []).controller('tagCtrl', function ($scope, $s
       alert(error);
     });
   };
-  
   $scope.openModal = () => {
     $scope.newTag = {};
     $scope.submitted = false;

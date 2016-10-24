@@ -8,10 +8,11 @@
             <div>
                 <label class="title">{{product.name}}</label><span class="product-num"> 版本数量：{{product.productVersions.length}}</span>
                 <div class="product-op"> 
+                    <a class="show-products disabled" ng-if="product.productVersions.length != 0" ng-init="showVersions[$index] = false" ng-click="showProducts($index)">展开版本<span class="glyphicon glyphicon-chevron-down"></span></a>
                     <a ng-click="delete(product._id)"><span class="glyphicon glyphicon-trash"></span>删除</a>
                     <a ng-click="openEditProductModal(product._id)"><span class="glyphicon glyphicon-edit"></span>编辑</a>
                     <a ng-click="openVersionModal(product._id,$index)"><span class="glyphicon glyphicon-plus"></span>添加版本</a>
-                    <a class="show-products" ng-init="showVersions[$index] = false" ng-click="showProducts($index)">展开版本<span class="glyphicon glyphicon-chevron-down"></span></a></div>
+                   </div>
             </div>
             <hr/>
             <div ng-if="showVersions[$index]">
@@ -28,7 +29,7 @@
                 </table>
             </div>
         </div>
-        <div class="pagination pagination-small" id="pager">
+        <div class="pagination pagination-small" id="pager" ng-if="page.totalPage != 0">
             <ul class="pagination pagination-sm">
                 <li ng-click="changePage(1)" ng-class="{'disabled':page.currPage == 1}"><a>首页</a></li>
                 <li ng-click="changePage(page.currPage - 1)" ng-class="{'disabled':page.currPage == 1}"><a>上一页</a></li>

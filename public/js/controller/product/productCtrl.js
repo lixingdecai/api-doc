@@ -36,7 +36,9 @@ angular.module('product.controllers', []).controller('productCtrl', function ($s
     for (var i = $scope.page.showStart; i <= $scope.page.showEnd; i++) {
       $scope.page.showPages.push(i);
     }
-    $scope.page.showPages.push('...');
+    if ($scope.page.totalPage > $scope.page.currPage && ($scope.page.currPage + 5 < $scope.page.totalPage)) {
+      $scope.page.showPages.push('...');
+    }
   }
   $scope.changePage = (currPage) => {
     var patrn = /^\d*$/;
@@ -110,7 +112,6 @@ angular.module('product.controllers', []).controller('productCtrl', function ($s
     console.log('添加产品');
     $('#productModal').modal('show');
   };
-
   $scope.openEditProductModal = (id) => {
     $scope.submitted = false;
     productService.get(id).then(result => {
@@ -121,7 +122,6 @@ angular.module('product.controllers', []).controller('productCtrl', function ($s
     console.log('编辑标签');
     $('#editproductModal').modal('show');
   };
-
   $scope.updateProduct = () => {
     $scope.submitted = true;
     if ($scope.editProduct_form.$valid) {
@@ -134,8 +134,6 @@ angular.module('product.controllers', []).controller('productCtrl', function ($s
       });
     } else {}
   };
-
-
   $scope.delete = (id) => {
     if (!window.confirm('确定要删除该产品？')) {
       return;

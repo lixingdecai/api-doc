@@ -520,7 +520,6 @@ angular.module('apiInfo.services', [])
       $http.get('/pages/' + projectId).success((data) => {
         if (data.status === 'success') {
           deferred.resolve(data.response);
-
           // 组装
           pageList = data.response;
           for (var pi in pageList) {

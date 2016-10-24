@@ -22,6 +22,7 @@ require('./service/login/loginService.js');
 require('./controller/project/projectCtrl.js');
 require('./service/project/projectService.js');
 require('./controller/interface/apiInfoCtrl.js');
+require('./controller/interface/addApiCtrl.js');
 require('./service/interface/apiInfoService.js');
 require('./service/user/userService.js');
 require('./controller/user/userCtrl.js');

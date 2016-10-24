@@ -98,7 +98,7 @@ exports.getAllByProjectId = (req, res) => {
     tools.responseFailure(res, 'Invalid project');
     return;
   }
-  Api.find({'project': project}).populate('products updateBy createBy').then(
+  Api.find({'project': project}).populate('products updateBy createBy').populate('tags').then(
     apis => tools.responseSuccess(res, apis),
     err => tools.responseFailure(res, err)
   );

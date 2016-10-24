@@ -1,12 +1,17 @@
 const angular = require('angular');
 angular.module('apiInfo.controllers', []).controller('apiInfoCtrl', apic);
 
-function apic($scope, $state, apiInfoService, $stateParams, $q, productService) {
+function apic($scope, $state, apiInfoService, $stateParams, $q, productService, tagService) {
   var projectId = $stateParams.projectId;
   var aId = $stateParams.actionId;
   init();
   // $scope.showNav = false;
-  $scope.isEdit = false; // 是否编辑状态
+  var editFlag = $stateParams.editFlag;
+  if (editFlag == 1) {
+    $scope.isEdit = true; // 是否编辑状态
+  } else {
+    $scope.isEdit = false; // 是否编辑状态
+  }
   $scope.viewState = true; // 是否预览状态
   $scope.doesImportType = 'reqData'; // json导入数据类型 reqData reqParam reqHeader resData
   // $scope.currentAction = {}; // 当前接口信息
@@ -40,6 +45,9 @@ function apic($scope, $state, apiInfoService, $stateParams, $q, productService) 
       $scope.productVersions = productVersions;
     }
   };
+  $scope.tagChange = (tag) => {
+    $scope.tag = tag;
+  };
 
   function addProduct(productVersions) {
     for (var i = 0; i < $scope.productList.length; i += 1) {
@@ -66,6 +74,32 @@ function apic($scope, $state, apiInfoService, $stateParams, $q, productService) 
       $scope.currentAction.products = {};
     }
     $scope.currentAction.products.push(productVersions);
+  };
+  $scope.addTag = (tag) => {
+    if (!tag || tag.isExist) {
+      return;
+    }
+    if (!$scope.currentAction.tags) {
+      $scope.currentAction.tags = [];
+    }
+    if (!tag.isExist) {
+      $scope.currentAction.tags.push(tag);
+      tag.isExist = true;
+      $scope.tag = null;
+    }
+  };
+  $scope.rmTag = (id) => {
+    for (var i = 0; i < $scope.currentAction.tags.length; i += 1) {
+      if ($scope.currentAction.tags[i]._id === id) {
+        $scope.currentAction.tags[i].isExist = false;
+        $scope.currentAction.tags.splice(i, 1);
+      }
+    }
+    for (var i = 0; i < $scope.tagList.length; i += 1) {
+      if ($scope.tagList[i]._id === id) {
+        $scope.tagList[i].isExist = false;
+      }
+    }
   };
   $scope.rmProduct = (productVersionsId) => {
     rmProduct(productVersionsId);
@@ -104,6 +138,7 @@ function apic($scope, $state, apiInfoService, $stateParams, $q, productService) 
           }
         }
       }
+      getAllTag(); //获取所有的标签
       getAllProduct(); // 获取所有产品线
       if ($scope.currentAction) {
         $scope.currentAction = apiInfoService.switchA($scope.currentAction.id);
@@ -136,6 +171,16 @@ function apic($scope, $state, apiInfoService, $stateParams, $q, productService) 
     for (var i = 0; i < $scope.currentAction.products.length; i += 1) {
       addProduct($scope.currentAction.products[i]);
     }
+    if ($scope.currentAction.tags) {
+      for (var i = 0; i < $scope.currentAction.tags.length; i += 1) {
+        for (var j = 0; j < $scope.tagList.length; j += 1) {
+          if ($scope.currentAction.tags[i]._id == $scope.tagList[j]._id) {
+            $scope.tagList[j].isExist = true;
+          }
+        }
+        $scope.currentAction.tags[i].isExist = true;
+      }
+    }
   }
   // 获取所有产品线
   function getAllProduct() {
@@ -148,6 +193,15 @@ function apic($scope, $state, apiInfoService, $stateParams, $q, productService) 
       // if (result && result.length > 0) {
       //   getAllVersion($scope.productList);
       // }
+    }, error => {
+      alert(error);
+    });
+  }
+  // 获取所有标签
+  function getAllTag() {
+    // 获取所有标签
+    tagService.getAll().then(result => {
+      $scope.tagList = result;
     }, error => {
       alert(error);
     });
@@ -387,7 +441,6 @@ function apic($scope, $state, apiInfoService, $stateParams, $q, productService) 
   //     sortParams(params[i].parameterList);
   //   }
   // }
-
   /**
    * process JSON import
    *
@@ -456,7 +509,10 @@ function apic($scope, $state, apiInfoService, $stateParams, $q, productService) 
           }
         }
         // process @order for import array data
-        if (typeof f2 in { number: undefined, boolean: undefined} && f.length > 1) {
+        if (typeof f2 in {
+            number: undefined
+            , boolean: undefined
+          } && f.length > 1) {
           mValues = [f2];
           for (i = 1; i < f.length; i += 1) {
             mValues.push(f[i]);
@@ -503,7 +559,10 @@ function apic($scope, $state, apiInfoService, $stateParams, $q, productService) 
         processJSONImport(f[key], key, notFirst ? id : null, true);
       });
     }
-    if (arrContext && typeof f in { number: undefined, boolean: undefined}) {
+    if (arrContext && typeof f in {
+        number: undefined
+        , boolean: undefined
+      }) {
       // process @order for import array data for array<object>
       mValues = [f];
       for (i = 1; i < arrContext.length; i += 1) {
@@ -519,3 +578,4 @@ function apic($scope, $state, apiInfoService, $stateParams, $q, productService) 
     }
   }
 }
+
