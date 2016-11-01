@@ -1,9 +1,85 @@
 <div ng-include="'../template/_include/nav.html'" class="nav-header"></div>
 <div class="container" id="apilist">
+
+ <tags-input ng-model="tags" 
+                display-property="name" 
+                placeholder="Add a country" 
+                replace-spaces-with-dashes="false"
+                template="tag-template">
+      <auto-complete source="loadCountries($query)"
+                     min-length="0"
+                     load-on-focus="true"
+                     load-on-empty="true"
+                     max-results-to-show="32"
+                     template="autocomplete-template"></auto-complete>
+    </tags-input>
+    
+    <script type="text/ng-template" id="tag-template">
+      <div class="tag-template">
+        <div class="left-panel">
+          <img ng-src="http://mbenford.github.io/ngTagsInput/images/flags/{{data.flag}}" ng-if="data.flag"/>
+        </div>
+        <div class="right-panel">
+          <span>{{$getDisplayText()}}</span>
+          <a class="remove-button" ng-click="$removeTag()">&#10006;</a>
+        </div>
+      </div>
+    </script>
+    
+    <script type="text/ng-template" id="autocomplete-template">
+      <div class="autocomplete-template">
+        <div class="left-panel">
+          <img ng-src="http://mbenford.github.io/ngTagsInput/images/flags/{{data.flag}}" />
+        </div>
+        <div class="right-panel">
+          <span ng-bind-html="$highlight($getDisplayText())"></span>
+          <span>({{data.rank}})</span>
+          <span>{{data.confederation}}</span>
+        </div>
+      </div>
+    </script>
     <div class="serach-box">
         <!-- <div class="">
             <div class="col-lg-12">搜索框</div>
         </div> -->
+
+        <tags-input ng-model="tags" 
+                display-property="name" 
+                placeholder="Add a country" 
+                replace-spaces-with-dashes="false"
+                template="tag-template">
+      <auto-complete source="loadCountries($query)"
+                     min-length="0"
+                     load-on-focus="true"
+                     load-on-empty="true"
+                     max-results-to-show="32"
+                     template="autocomplete-template"></auto-complete>
+    </tags-input>
+    
+    <script type="text/ng-template" id="tag-template">
+      <div class="tag-template">
+        <div class="left-panel">
+          <img ng-src="http://mbenford.github.io/ngTagsInput/images/flags/{{data.flag}}" ng-if="data.flag"/>
+        </div>
+        <div class="right-panel">
+          <span>{{$getDisplayText()}}</span>
+          <a class="remove-button" ng-click="$removeTag()">&#10006;</a>
+        </div>
+      </div>
+    </script>
+    
+    <script type="text/ng-template" id="autocomplete-template">
+      <div class="autocomplete-template">
+        <div class="left-panel">
+          <img ng-src="http://mbenford.github.io/ngTagsInput/images/flags/{{data.flag}}" />
+        </div>
+        <div class="right-panel">
+          <span ng-bind-html="$highlight($getDisplayText())"></span>
+          <span>({{data.rank}})</span>
+          <span>{{data.confederation}}</span>
+        </div>
+      </div>
+    </script>
         <div class="row">
             <div class="col-lg-3">
                 <div class="input-group">
@@ -60,7 +136,7 @@
             <div class="col-lg-3">
                 <div class="input-group">
                     <span class="input-group-addon">标签</span>
-                    <input type="text" class="form-control" placeholder="" ng-model="query.productVersion">
+                    <input type="text" class="form-control" placeholder="" ng-model="query.tags">
                 </div>
             </div>
             <div class="col-lg-3">
@@ -109,4 +185,15 @@
             </div>
         </div>
     </div>
+    <div class="pagination pagination-small" id="pager" ng-if="page.totalPage != 0">
+            <ul class="pagination pagination-sm">
+                <li ng-click="changePage(1)" ng-class="{'disabled':page.currPage == 1}"><a>首页</a></li>
+                <li ng-click="changePage(page.currPage - 1)" ng-class="{'disabled':page.currPage == 1}"><a>上一页</a></li>
+                <li ng-click="changePage(showPage)" ng-class="{'active':showPage == page.currPage}" class="pageno" ng-repeat="showPage in page.showPages track by $index"><a>{{showPage}}</a></li>
+                <li ng-click="changePage(page.currPage + 1)" ng-class="{'disabled':page.currPage == page.totalPage}"><a>下一页</a></li>
+                <li ng-click="changePage(page.totalPage)" ng-class="{'disabled':page.currPage == page.totalPage}"><a>末页</a></li>
+                <li style="margin-top:3px;" class="disabled"><a>共{{page.totalPage}}页</a></li>
+            </ul>
+        </div>
+</div>
 </div>

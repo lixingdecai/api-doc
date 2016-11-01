@@ -19,7 +19,7 @@ exports.findByApiId = (req, res) => {
   console.log('apiId : ' + apiId);
 
 
-  ApiHistory.find({apiId: apiId}).populate('createBy updateBy').then(
+  ApiHistory.find({apiId: apiId}).populate('createBy updateBy').populate('products updateBy createBy').populate('tags').then(
     apiHistory => {
       tools.responseSuccess(res, apiHistory)
     },

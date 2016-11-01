@@ -262,6 +262,129 @@ exports.del = (req, res) => {
   );
 };
 
+exports.pageList = (req, res) => {
+  const pageSize = parseInt(req.params.pageSize);
+  const currPage = parseInt(req.params.currPage);
+  const skip = (currPage - 1) * pageSize;
+  const user = req.session.user;
+  if (!user) {
+    tools.responseFailure(res, '请求超时');
+    return;
+  }
+  const condition = {};
+  const query = req.params;
+  condition.mark = 0;
+ 
+  if (query['project'] != 'undefined') {
+    condition.project = query.project;
+  }
+
+  ['title', 'url', 'pathname'].forEach(q => {
+    if (query[q] != 'undefined') {
+      condition[q] = new RegExp(query[q], 'i');
+    }
+  });
+
+  ['tags', 'products'].forEach(q => {
+    if (query[q] != 'undefined') {
+      condition[q] = {
+        $in: query[q].split(',')
+      };
+    }
+  });
+
+  // condition.updateAt = {
+  //   $gte: query.updateBegin,
+  //   $lte: query.updateEnd
+  // }
+
+
+  var q = Api.find(condition, findAllProjection);
+  if(query.updateBegin != 'undefined'){
+    q.where('updateAt').gte(query.updateBegin);
+  }
+  if(query.updateEnd != 'undefined'){
+    q.where('updateAt').lte(query.updateEnd);
+  }
+
+
+  // query.exec(function(err, docs) {
+  //   // called when the `query.complete` or `query.error` are called
+  //   // internally
+  // });
+  // console.log(condition);
+  q.skip(skip).limit(pageSize).populate('project products updateBy createBy').then(
+    apis => {
+      // console.log('apis success' + apis);
+      favourite.Favourite.find({
+          user: user._id
+        })
+        .then((favourites) => {
+            // console.log('favourites success' + favourites);
+            apis.forEach(api => {
+              api['favourite'] = false;
+              favourites.forEach(favourite => {
+                // console.log(api._id + ' ---- ' + favourite.api);
+                // console.log(favourite.api.equals(api._id));
+                if (favourite.api.equals(api._id)) {
+                  // console.log(api);
+                  api['favourite'] = true;
+                }
+              });
+            });
+            // console.log(apis);
+            // apis.favourite = true;
+            // console.log(apis);
+          tools.responseSuccess(res, apis);
+          },
+          err => tools.responseFailure(res, err));
+      // tools.responseSuccess(res, apis)
+    },
+    err => tools.responseFailure(res, err)
+  );
+};
+exports.totalCount = (req, res) => {
+
+  const condition = {};
+  const query = req.params;
+
+  // console.log('query:::: ');
+  // console.log(query);
+  condition.mark = 0;
+
+  if (query['project'] != 'undefined') {
+    condition.project = query.project;
+  }
+
+  ['title', 'url', 'pathname'].forEach(q => {
+    if (query[q] != 'undefined') {
+      condition[q] = new RegExp(query[q], 'i');
+    }
+  });
+
+  ['tags', 'products'].forEach(q => {
+    if (query[q] != 'undefined') {
+      condition[q] = {
+        $in: query[q].split(',')
+      };
+    }
+  });
+
+  var q = Api.find(condition);
+  if(query.updateBegin != 'undefined'){
+    q.where('updateAt').gte(query.updateBegin);
+  }
+  if(query.updateEnd != 'undefined'){
+    q.where('updateAt').lte(query.updateEnd);
+  }
+
+  q.count(function (err, count) {
+    tools.responseSuccess(res, count);
+  });
+};
+
+
+
 exports.search = (req, res) => {
   const user = req.session.user;
   if (!user) {
@@ -283,7 +406,6 @@ exports.search = (req, res) => {
       condition[q] = new RegExp(query[q], 'i');
     }
   });
-
   ['tags', 'products'].forEach(q => {
     if (query[q]) {
       condition[q] = {
@@ -311,9 +433,7 @@ exports.search = (req, res) => {
   //   // called when the `query.complete` or `query.error` are called
   //   // internally
   // });
-
   // console.log(condition);
-
   q.populate('project products updateBy createBy').then(
     apis => {
       // console.log('apis success' + apis);
@@ -336,6 +456,7 @@ exports.search = (req, res) => {
             // console.log(apis);
             // apis.favourite = true;
             // console.log(apis);
+            
           tools.responseSuccess(res, apis);
           },
           err => tools.responseFailure(res, err));

@@ -112,7 +112,7 @@
 
       </div>
       <div ng-if="currentAction.param.requestParameter.length > 0 || isEdit" class="param-item">
-        <h2>请求参数列表<button class="btn btn-info btn-xs" ng-click="addParam('reqParam')" ng-if="isEdit">添加参数</button><button class="btn btn-danger btn-xs" ng-click="importJson('reqParam')" ng-if="isEdit">导入json</button></h2>
+        <h2>请求参数列表<button class="btn btn-info btn-xs margin15" ng-click="addParam('reqParam')" ng-if="isEdit">添加参数</button><button class="btn btn-danger btn-xs" ng-click="importJson('reqParam')" ng-if="isEdit">导入json</button></h2>
         <table class="table table-striped">
           <tbody>
             <tr class="head">
@@ -129,7 +129,7 @@
                   <!-- <a ng-click="addParam('child', rp.id)"><i class="glyphicon glyphicon-plus"></i></a> -->
                 </div>
               </td>
-              <td class="td-param identifier" style="padding-left:{{rp.parentsIdList.length*14+1}}px;width: 25%;">
+              <td class="td-param identifier" style="padding-left:{{rp.pNum*14+1}}px;width: 25%;">
                 <input type="text" ng-model="rp.identifier" ng-if="isEdit"><span ng-if="!isEdit">{{rp.identifier}}</span></td>
               <td class="td-param name">
                 <input type="text" ng-model="rp.name" ng-if="isEdit"><span ng-if="!isEdit">{{rp.name}}</span></td>
@@ -156,7 +156,7 @@
         </table>
       </div>
       <div ng-if="currentAction.param.requestData.length > 0 || isEdit" class="param-item">
-        <h2>请求数据列表<button class="btn btn-info btn-xs" ng-click="addParam('reqData')" ng-if="isEdit">添加参数</button><button class="btn btn-danger btn-xs" ng-click="importJson('reqData')" ng-if="currentAction.requestDataType =='raw' && isEdit">导入json</button></h2>
+        <h2>请求数据列表<button class="btn btn-info btn-xs margin15" ng-click="addParam('reqData')" ng-if="isEdit">添加参数</button><button class="btn btn-danger btn-xs" ng-click="importJson('reqData')" ng-if="currentAction.requestDataType =='raw' && isEdit">导入json</button></h2>
         <h5><div ng-if="!isEdit">请求数据类型：{{currentAction.requestDataType}}</div></h5>
         <div class="RadioGroup" ng-if="isEdit">
           &nbsp;&nbsp;&nbsp;
@@ -186,7 +186,7 @@
                   <a ng-if="rp.dataType=='object' || rp.dataType=='array<object>' || rp.dataType=='array<number>' || rp.dataType=='array<string>' || rp.dataType=='array<boolean>'" ng-click="addParam('child', rp.id, 'reqData')"><i class="glyphicon glyphicon-plus"></i></a>
                 </div>
               </td>
-              <td class="td-param identifier" style="padding-left:{{rp.parentsIdList.length*14+1}}px;width: 25%;">
+              <td class="td-param identifier" style="padding-left:{{rp.pNum*14+1}}px;width: 25%;">
                 <input type="text" ng-model="rp.identifier" ng-if="isEdit"><span ng-if="!isEdit">{{rp.identifier}}</span></td>
               <td class="td-param name">
                 <input type="text" ng-model="rp.name" ng-if="isEdit"><span ng-if="!isEdit">{{rp.parentsIdList.length}}{{rp.name}}</span></td>
@@ -212,7 +212,7 @@
         </table>
       </div>
       <div ng-if="currentAction.param.responseData.length > 0 || isEdit" class="param-item">
-        <h2>响应参数列表<button class="btn btn-info btn-xs" ng-click="addParam('resData')" ng-if="isEdit">添加参数</button><button class="btn btn-danger btn-xs" ng-click="importJson('resData')" ng-if="isEdit">导入json</button></h2>
+        <h2>响应参数列表<button class="btn btn-info btn-xs margin15" ng-click="addParam('resData')" ng-if="isEdit">添加参数</button><button class="btn btn-danger btn-xs" ng-click="importJson('resData')" ng-if="isEdit">导入json</button></h2>
         <table class="table">
           <tbody>
             <tr class="head">
@@ -255,7 +255,7 @@
         </table>
       </div>
       <div ng-if="currentAction.param.requestHeader.length > 0 || isEdit" class="param-item">
-        <h2>请求头<button class="btn btn-info btn-xs" ng-click="addParam('reqHeader')" ng-if="isEdit">添加参数</button><button class="btn btn-danger btn-xs" ng-click="importJson('reqHeader')" ng-if="isEdit">导入json</button></h2>
+        <h2>请求头<button class="btn btn-info btn-xs margin15" ng-click="addParam('reqHeader')" ng-if="isEdit">添加参数</button><button class="btn btn-danger btn-xs" ng-click="importJson('reqHeader')" ng-if="isEdit">导入json</button></h2>
         <table class="table">
           <tbody>
             <tr class="head">

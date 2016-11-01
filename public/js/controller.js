@@ -20,4 +20,7 @@ angular.module('start.controllers', [])
         () => console.log('退出失败')
       );
     }
+    pageinfo = function (){
+      alert('pageinfo');
+    }
   }]);

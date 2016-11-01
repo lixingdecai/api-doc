@@ -363,6 +363,8 @@ function apic($scope, $state, apiInfoService, $stateParams, $q, productService, 
   // 编辑页面和接口
   $scope.editEvent = () => {
     $scope.isEdit = true;
+    console.error(1112);
+    var cirr = $scope.currentAction;
   };
   // 页面保存事件
   $scope.saveEvent = () => {
@@ -386,6 +388,29 @@ function apic($scope, $state, apiInfoService, $stateParams, $q, productService, 
     $scope.isEdit = false;
     $scope.chooseHisItem = historyId;
   };
+  // parameter 解析成层级结构modal
+  function parseParam(paramList, resultList) {
+    var pil = [];
+    var plist = paramList.parameterList;
+    if (!plist) {
+      return;
+    }
+    var pl = plist.length;
+    for (var i = 0; i < pl; i += 1) {
+      // parentsIdList.push(paramList.id);
+      // if (parentsIdList) {
+      //   for (var ppid in parentsIdList) {
+      //     pil.push(parentsIdList[ppid]);
+      //   }
+      // }
+      // pil.push(paramList.id);
+      // plist[i].parentsIdList = pil;
+      resultList.push(plist[i]);
+      if (plist[i].parameterList && plist[i].parameterList.length > 0) {
+        parseParam(plist[i], resultList, pil);
+      }
+    }
+  };
   // 预览历史纪录
   $scope.viewHistory = () => {
     const al = $scope.apiHistoryList.length;
@@ -394,6 +419,73 @@ function apic($scope, $state, apiInfoService, $stateParams, $q, productService, 
         $scope.apiHistoryList[i].id = $scope.apiHistoryList[i].apiId;
         $scope.viewState = false;
         $scope.currentAction = $scope.apiHistoryList[i];
+        if (!$scope.currentAction.requestParameter) {
+          $scope.currentAction.requestParameterList = [];
+        } else {
+          $scope.currentAction.requestParameterList = JSON.parse($scope.currentAction.requestParameter);
+        }
+        if (!$scope.currentAction.requestHeader) {
+          $scope.currentAction.requestHeaderList = [];
+        } else {
+          $scope.currentAction.requestHeaderList = JSON.parse($scope.currentAction.requestHeader);
+        }
+        if (!$scope.currentAction.requestData) {
+          $scope.currentAction.requestDataList = [];
+        } else {
+          $scope.currentAction.requestDataList = JSON.parse($scope.currentAction.requestData);
+        }
+        if (!$scope.currentAction.responseData) {
+          $scope.currentAction.responseDataList = [];
+        } else {
+          $scope.currentAction.responseDataList = JSON.parse($scope.currentAction.responseData);
+        }
+        var ca = $scope.currentAction;
+        var param = {};
+        // if (!param) {
+        //   param = {};
+        // }
+        param.requestParameter = [];
+        param.requestHeader = [];
+        param.requestData = [];
+        param.responseData = [];
+        if (ca === null) return null;
+        if (ca.requestParameterList) {
+          let rpl = ca.requestParameterList.length;
+          for (let i = 0; i < rpl; i += 1) {
+            ca.requestParameterList[i].parentsIdList = [];
+            param.requestParameter.push(ca.requestParameterList[i]);
+            parseParam(ca.requestParameterList[i], param.requestParameter, []);
+          }
+          // ca.requestParameterList = requestParameter;
+        }
+        if (ca.requestDataList) {
+          let rpl = ca.requestDataList.length;
+          for (let i = 0; i < rpl; i += 1) {
+            ca.requestDataList[i].parentsIdList = [];
+            param.requestData.push(ca.requestDataList[i]);
+            parseParam(ca.requestDataList[i], param.requestData, []);
+          }
+          // ca.requestDataList = requestData;
+        }
+        if (ca.requestHeaderList) {
+          let rpl = ca.requestHeaderList.length;
+          for (let i = 0; i < rpl; i += 1) {
+            ca.requestHeaderList[i].parentsIdList = [];
+            param.requestHeader.push(ca.requestHeaderList[i]);
+            parseParam(ca.requestHeaderList[i], param.requestHeader, []);
+          }
+          // ca.requestHeaderList = requestHeader;
+        }
+        if (ca.responseDataList) {
+          var rpl = ca.responseDataList.length;
+          for (let i = 0; i < rpl; i += 1) {
+            ca.responseDataList[i].parentsIdList = [];
+            param.responseData.push(ca.responseDataList[i]);
+            parseParam(ca.responseDataList[i], param.responseData, []);
+          }
+          // ca.responseDataList = responseData;
+        }
+        ca.param = param;
       }
     }
     $('#modal4').modal('hide');
