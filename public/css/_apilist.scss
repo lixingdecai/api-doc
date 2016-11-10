@@ -5,7 +5,15 @@
     padding: 10px;
 
     .row {
-      margin: 5px 0;
+      margin: 15px 0;
+    }
+
+    .remove-icon {
+      position:absolute;
+      top:9px;
+      right:45px;
+      z-index:999;
+      color:#a94442;
     }
   }
   .api-item-box {

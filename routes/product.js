@@ -89,6 +89,8 @@ exports.getAll = (req, res) => {
             // console.log(product._id + ' ------ ' + version.product);
             // console.log(version.product.equals(product._id));
             if (version.product.equals(product._id)) {
+              version.productName = product.name;
+              version.displayName = product.name + ' -> ' + version.name;
               product.productVersions.push(version);
               // console.log(' ====== ' + product);
             }

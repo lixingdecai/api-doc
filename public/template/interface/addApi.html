@@ -21,54 +21,47 @@
         </div>
         <div class="action-info">
             <div class="item clearfix" style="margin-bottom:15px;">
-                <label for="recipient-name" class="control-label">产品线:</label>
-                <br/>
-                <a class="crumb-select-item" title="其它" ng-repeat="pro in newApiVO.newApi.products">
-                    <!-- <b>画幅：</b> -->
-                    <em>{{pro.name}}</em>
-                    <i class="remove-item" ng-click="rmProduct(pro._id)"></i>
-                </a>
-                <div class="btn-group">
-                    <div class="btn-group">
-                        <button type="button" class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown">
-                            {{productVersions.name}}
-                            <span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu" role="menu">
-                            <li ng-repeat="product in productList" ng-class="{true: 'dropdown-submenu', false: ''}[product.productVersions.length >0]">
-                                <a href="javascript:;">{{product.name}}</a>
-                                <ul class="dropdown-menu" ng-if="product.productVersions.length >0">
-                                    <li ng-repeat="v in product.productVersions" ng-class="{true: 'disabled', false: ''}[v.exist]"> <a ng-disabled="v.exist" ng-click="productChange(v)">{{v.name}}</a></li>
-                                </ul>
-                            </li>
-                        </ul>
+                <label for="recipient-name" class="control-label">产品线:</label> 
+                <tags-input ng-model="newApiVO.newApi.products" display-property="displayName" placeholder="添加产品线" replace-spaces-with-dashes="false" template="product-template" min-length="0">
+                    <auto-complete source="loadProducts($query)" min-length="0" load-on-focus="true" load-on-empty="true" max-results-to-show="32" template="autocompleteProduct-template"></auto-complete>
+                </tags-input>
+                <script type="text/ng-template" id="product-template">
+                    <div class="tag-template">
+                        <div class="right-panel">
+                            <span>{{$getDisplayText()}}</span>
+                            <a class="remove-button" ng-click="$removeTag()">&#10006;</a>
+                        </div>
                     </div>
-                    <button type="button" class="btn btn-xs btn-default" ng-click="addProduct(productVersions)">添加{{version.productVersions[0].name}}</button>
-                </div>
+                </script>
+                <script type="text/ng-template" id="autocompleteProduct-template">
+                    <div class="autocomplete-template">
+                        <div class="right-panel">
+                            <span ng-bind-html="$highlight($getDisplayText())"></span>
+                        </div>
+                    </div>
+                </script>
             </div>
             <div class="item clearfix" style="margin-bottom:15px;">
                 <label for="recipient-name" class="control-label">标签:</label>
-                <br/>
-                <a class="crumb-select-item" title="其它" ng-repeat="pro in newApiVO.newApi.tags">
-                    <!-- <b>画幅：</b> -->
-                    <em>{{pro.name}}</em>
-                    <i class="remove-item" ng-click="rmTag(pro._id)"></i>
-                </a>
-                <div class="btn-group">
-                    <div class="btn-group">
-                        <button type="button" class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown">
-                            {{tag.name}}
-                            <span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu" role="menu">
-                            <li ng-repeat="tag in tagList" ng-class="{true: 'disabled', false: ''}[tag.isExist]">
-                                <a ng-disabled="tag.isExist" ng-click="tagChange(tag)" href="javascript:;">{{tag.name}}</a>
-                            </li>
-                        </ul>
+
+                <tags-input ng-model="newApiVO.newApi.tags" display-property="name" placeholder="添加标签" replace-spaces-with-dashes="false" template="tag-template" min-length="0">
+                    <auto-complete source="loadTags($query)" min-length="0" load-on-focus="true" load-on-empty="true" max-results-to-show="32" template="autocomplete-template"></auto-complete>
+                </tags-input>
+                <script type="text/ng-template" id="tag-template">
+                    <div class="tag-template">
+                        <div class="right-panel">
+                            <span>{{$getDisplayText()}}</span>
+                            <a class="remove-button" ng-click="$removeTag()">&#10006;</a>
+                        </div>
                     </div>
-                    <button type="button" class="btn btn-xs btn-default" ng-class="{true: 'disabled', false: ''}[tag.isExist]" ng-click="addTag(tag)">添加</button>
-                </div>
-            </div>
+                </script>
+                <script type="text/ng-template" id="autocomplete-template">
+                    <div class="autocomplete-template">
+                        <div class="right-panel">
+                            <span ng-bind-html="$highlight($getDisplayText())"></span>
+                        </div>
+                    </div>
+                </script>
         </div>
         <div class="form-group">
             <label for="recipient-name" class="control-label">请求类型:</label>
@@ -279,7 +272,7 @@
                 </tbody>
             </table>
         </div>
-        <div class="form-group" style="margin-bottom:60px;"> 
+        <div class="form-group" style="margin-bottom:60px;">
             <button type="button" ng-click="addApi();" class="btn btn-primary">保存接口</button>
         </div>
     </form>

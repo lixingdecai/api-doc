@@ -91,11 +91,15 @@
       margin-top: 10px;
       clear: both;
 
+      .label{
+        margin-right: 15px;
+      }
+
       &:after {
         clear: both;
       }
       .item {
-        margin: 4px;
+        margin: 10px;
         font-size: 12px;
 
         b {

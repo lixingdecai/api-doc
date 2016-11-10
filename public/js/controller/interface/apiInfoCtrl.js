@@ -1,10 +1,55 @@
 const angular = require('angular');
+const moment = require('moment');
 angular.module('apiInfo.controllers', []).controller('apiInfoCtrl', apic);
 
 function apic($scope, $state, apiInfoService, $stateParams, $q, productService, tagService) {
   var projectId = $stateParams.projectId;
   var aId = $stateParams.actionId;
+  $scope.labelCss = ['label-default', 'label-primary', 'label-success', 'label-info', 'label-warning', 'label-danger'];
   init();
+  $scope.loadTags = ($query) => {
+    var tagList = $scope.tagList;
+    return tagList.filter(function (tag) {
+      return tag.name.toLowerCase().indexOf($query.toLowerCase()) != -1;
+    });
+  };
+  $scope.loadProducts = ($query) => {
+  
+    var productVersions = $scope.productVsersions;
+     
+    return productVersions.filter(function (version) {
+      return version.displayName.toLowerCase().indexOf($query.toLowerCase()) != -1;
+    });
+  };
+  // 获取所有产品线
+  function getAllProductAndVersion() {
+    // 获取所有产品线
+    productService.getAllProducts().then(result => {
+      $scope.productList = result;
+      $scope.productVsersions = [];
+      if ($scope.productList && $scope.productList.length > 0) {
+        for (var n = 0; n < $scope.productList.length; n++) {
+          var product = $scope.productList[n];
+          var versions = product.productVersions;
+          for (var m = 0; m < versions.length; m++) {
+            var version = versions[m];
+            $scope.productVsersions.push(version);
+          }
+        }
+      }
+    }, error => {
+      alert(error);
+    });
+  }
+  // 获取所有标签
+  function getAllTag() {
+    // 获取所有标签
+    tagService.getAll().then(result => {
+      $scope.tagList = result;
+    }, error => {
+      alert(error);
+    });
+  }
   // $scope.showNav = false;
   var editFlag = $stateParams.editFlag;
   if (editFlag == 1) {
@@ -140,8 +185,23 @@ function apic($scope, $state, apiInfoService, $stateParams, $q, productService, 
       }
       getAllTag(); //获取所有的标签
       getAllProduct(); // 获取所有产品线
+      getAllProductAndVersion();
       if ($scope.currentAction) {
         $scope.currentAction = apiInfoService.switchA($scope.currentAction.id);
+        var productVersions = $scope.currentAction.products;
+        if (productVersions && productVersions.length > 0) {
+          productService.getAllProducts().then(products => {
+            for (var n = 0; n < productVersions.length; n++) {
+              for (var m = 0; m < products.length; m++) {
+                if (productVersions[n].product == products[m]._id) {
+                  productVersions[n].displayName = products[m].name + ' -> ' + productVersions[n].name;
+                }
+              }
+            }
+          }, error => {
+            alert(error);
+          });
+        }
         getFavourite(); // 获取订阅信息
         if (!$scope.currentAction.protocol) {
           $scope.currentAction.protocol = 'http';
@@ -334,6 +394,12 @@ function apic($scope, $state, apiInfoService, $stateParams, $q, productService, 
     $scope.apiHistoryList = [];
     apiInfoService.getHistory($scope.currentAction.id).then(result => {
       $scope.apiHistoryList = result;
+      if ($scope.apiHistoryList) {
+        for (var i = 0; i < $scope.apiHistoryList.length; i++) {
+          var updateAt = $scope.apiHistoryList[i].updateAt;
+          moment.updateAt()
+        }
+      }
     }, err => {
       console.log('获取接口历史信息失败' + err);
     });
@@ -363,8 +429,6 @@ function apic($scope, $state, apiInfoService, $stateParams, $q, productService, 
   // 编辑页面和接口
   $scope.editEvent = () => {
     $scope.isEdit = true;
-    console.error(1112);
-    var cirr = $scope.currentAction;
   };
   // 页面保存事件
   $scope.saveEvent = () => {

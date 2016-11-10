@@ -2,6 +2,27 @@ const angular = require('angular');
 angular.module('addApi.controllers', []).controller('addApiCtrl', function ($scope, $state, apiInfoService
   , productService, tagService, projectService, $stateParams, $q) {
   initData();
+  $scope.loadTags = ($query) => {
+    var tagList = $scope.tagList;
+    return tagList.filter(function (tag) {
+      return tag.name.toLowerCase().indexOf($query.toLowerCase()) != -1;
+    });
+  };
+
+  $scope.loadProducts = ($query) => {
+    var productVersions = $scope.productVsersions;
+    return productVersions.filter(function (version) {
+      return version.displayName.toLowerCase().indexOf($query.toLowerCase()) != -1;
+    });
+  };
+
+
+  $scope.choseProduct = () => {
+    $scope.isChoseProducts = true;
+  };
+  $scope.cancelChoseProduct = () => {
+    $scope.isChoseProducts = false;
+  };
   // 通过项目id设置接口模块数据
   $scope.setPageData = () => {
     if ($scope.newApiVO.newApi.project) {
@@ -45,12 +66,17 @@ angular.module('addApi.controllers', []).controller('addApiCtrl', function ($sco
     // 获取所有产品线
     productService.getAllProducts().then(result => {
       $scope.productList = result;
-      if ($scope.currentAction) {
-        initActionProduct();
+      $scope.productVsersions = [];
+      if ($scope.productList && $scope.productList.length > 0) {
+        for (var n = 0; n < $scope.productList.length; n++) {
+          var product = $scope.productList[n];
+          var versions = product.productVersions;
+          for (var m = 0; m < versions.length; m++) {
+            var version = versions[m];
+            $scope.productVsersions.push(version);
+          }
+        }
       }
-      // if (result && result.length > 0) {
-      //   getAllVersion($scope.productList);
-      // }
     }, error => {
       alert(error);
     });
@@ -69,7 +95,6 @@ angular.module('addApi.controllers', []).controller('addApiCtrl', function ($sco
     // 获取所有项目
     projectService.getAll().then(result => {
       $scope.projectList = result;
-      console.error($scope.projectList);
     }, error => {
       alert(error);
     });
@@ -78,7 +103,6 @@ angular.module('addApi.controllers', []).controller('addApiCtrl', function ($sco
   function getPageByProjectId(id) {
     apiInfoService.getPageByProjectId(id).then(result => {
       $scope.pageList = result;
-      console.error($scope.pageList);
     }, error => {
       alert(error);
     });
@@ -120,6 +144,11 @@ angular.module('addApi.controllers', []).controller('addApiCtrl', function ($sco
     if (!productVersions.exist) {
       $scope.productVersions = productVersions;
     }
+    addProduct(productVersions);
+    if (!$scope.newApiVO.newApi.products) {
+      $scope.newApiVO.newApi.products = [];
+    }
+    $scope.newApiVO.newApi.products.push(productVersions);
   };
   // 添加产品
   function addProduct(productVersions) {
@@ -141,6 +170,9 @@ angular.module('addApi.controllers', []).controller('addApiCtrl', function ($sco
       }
     }
   }
+  $scope.$removeTag = () => {
+    alert('sss');
+  };
   // 添加产品
   $scope.addProduct = (productVersions) => {
     addProduct(productVersions);
@@ -512,40 +544,39 @@ angular.module('addApi.controllers', []).controller('addApiCtrl', function ($sco
   }
   // 导入json
   $scope.doImportJSON = () => {
-    // if (!validate('formImportJSONFloater')) return;
-    // var ele = b.g('importJSONFloater-text');
-    var txt = $scope.reqHeadJson;
-    try {
-      if (typeof JSON === 'undefined') {
-        alert('您用的啥浏览器啊？连JSON转换都不支持也...请使用IE9+/Chrome/FF试试看？');
-        return;
+      // if (!validate('formImportJSONFloater')) return;
+      // var ele = b.g('importJSONFloater-text');
+      var txt = $scope.reqHeadJson;
+      try {
+        if (typeof JSON === 'undefined') {
+          alert('您用的啥浏览器啊？连JSON转换都不支持也...请使用IE9+/Chrome/FF试试看？');
+          return;
+        }
+        /* eslint no-eval: "error"*/
+        /* eslint-env browser*/
+        var data = window.eval('(' + txt + ')');
+        if (data instanceof Array) {
+          data = data[0];
+        }
+        // ele.value = '';
+        processJSONImport(data);
+        console.log(data);
+        setParamViewModel();
+        $('#modal1').modal('hide');
+        // this.cancelImportJSON();
+      } catch (e) {
+        alert('JSON解析错误: ' + e.message);
+        // showMessage(CONST.ERROR, ELEMENT_ID.IMPORT_JSON_MESSAGE, 'JSON解析错误: ' + e.message);
       }
-      /* eslint no-eval: "error"*/
-      /* eslint-env browser*/
-      var data = window.eval('(' + txt + ')');
-      if (data instanceof Array) {
-        data = data[0];
-      }
-      // ele.value = '';
-      processJSONImport(data);
-      console.log(data);
-      setParamViewModel();
-      $('#modal1').modal('hide');
-      // this.cancelImportJSON();
-    } catch (e) {
-      alert('JSON解析错误: ' + e.message);
-      // showMessage(CONST.ERROR, ELEMENT_ID.IMPORT_JSON_MESSAGE, 'JSON解析错误: ' + e.message);
     }
-  }
-
-  /**
-   * process JSON import
-   *
-   * @param {object}  f value to be processed
-   * @param {string}  k key
-   * @param {number}  pid parameter id
-   * @param {boolean} notFirst
-   */
+    /**
+     * process JSON import
+     *
+     * @param {object}  f value to be processed
+     * @param {string}  k key
+     * @param {number}  pid parameter id
+     * @param {boolean} notFirst
+     */
   function processJSONImport(f, k, pId, notFirst, arrContext) {
     var id;
     var param = {};

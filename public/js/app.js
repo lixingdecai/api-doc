@@ -12,7 +12,7 @@ const vimtAPP = angular.module('vimt', ['ui.router', 'ui.bootstrap.datetimepicke
   'user.controllers', 'user.services',
   'product.controllers', 'product.services',
   'tag.controllers', 'tag.services',
-  'mock.controllers', 'mock.services'
+  'mock.controllers', 'mock.services', 'ngTagsInput'
 ]);
 // vimtAPP.constant('moment', require('moment-timezone'));
 vimtAPP.run(['$rootScope', ($rootScope, $location, $state) => {

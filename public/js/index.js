@@ -33,5 +33,5 @@ require('./service/tag/tagService.js');
 require('./controller/mock/mockCtrl.js');
 require('./service/mock/mockService.js');
 require('./utils/utils.js');
-require('../libs/ng-tags-input.min.js');
-require('../libs/ng-tags-input.min.css');
+require('../libs/nginput/js/ng-tags-input.min.js');
+require('../libs/nginput/css/ng-tags-input.min.css');

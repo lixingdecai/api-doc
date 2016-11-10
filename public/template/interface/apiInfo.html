@@ -1,198 +1,193 @@
 <div ng-include="'../template/_include/nav.html'" class="nav-header"></div>
 <div class="container" id="apiInfo">
-  <div class="header-box">
-    <div>
-      <button id="btnSave" type="button" ng-if="viewState" class="btn btn-warning btn-sm" data-toggle="tooltip" data-placement="bottom" data-original-title="填写一些备注后保存" ng-click="showAddPage()">
+    <div class="header-box">
+        <div>
+            <button id="btnSave" type="button" ng-if="viewState" class="btn btn-warning btn-sm" data-toggle="tooltip" data-placement="bottom" data-original-title="填写一些备注后保存" ng-click="showAddPage()">
                 <span class="glyphicon glyphicon-plus" data-original-title="" title=""></span> 新建模块
             </button>
-      <button id="btnSave" type="button" class="btn btn-warning btn-sm" data-toggle="tooltip" data-placement="bottom" data-original-title="填写一些备注后保存" ng-if="isEdit" ng-click="saveEvent()">
+            <button id="btnSave" type="button" class="btn btn-warning btn-sm" data-toggle="tooltip" data-placement="bottom" data-original-title="填写一些备注后保存" ng-if="isEdit" ng-click="saveEvent()">
                 <span class="glyphicon glyphicon-floppy-disk" data-original-title="" title=""></span> 保存接口
             </button>
-      <button id="btnCancel" type="button" class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="取消编辑，放弃所有未保存的修改" ng-if="isEdit" ng-click="cancelEditEvent()">
+            <button id="btnCancel" type="button" class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="取消编辑，放弃所有未保存的修改" ng-if="isEdit" ng-click="cancelEditEvent()">
                 <span class="glyphicon glyphicon-trash" data-original-title="" title=""></span> 取消
             </button>
-      <button id="btnEdit" type="button" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="bottom" data-original-title="锁定并进入文档编辑状态" ng-click="editEvent()" ng-if="!isEdit && viewState">
+            <button id="btnEdit" type="button" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="bottom" data-original-title="锁定并进入文档编辑状态" ng-click="editEvent()" ng-if="!isEdit && viewState">
                 <span class="glyphicon glyphicon-pencil" data-original-title="" title=""></span> 编辑
             </button>
-      <button id="btnExitVersion" type="button" class="btn btn-default btn-sm" data-toggle="tooltip" ng-if="!viewState" data-placement="bottom" ng-click="refleshPage()" title="" data-original-title="退出版本查看">
+            <button id="btnExitVersion" type="button" class="btn btn-default btn-sm" data-toggle="tooltip" ng-if="!viewState" data-placement="bottom" ng-click="refleshPage()" title="" data-original-title="退出版本查看">
                 <span class="glyphicon glyphicon-arrow-left" data-original-title="" title=""></span> 返回
             </button>
-    </div>
-  </div>
-  <div class="content-box">
-    <div class="left-tree">
-      <div class="page-item-box" ng-repeat="pg in pageList track by $index">
-        <div class="page-item ec-tree">
-          <label>{{pg.name}}&nbsp;&nbsp;<a ng-if="isEdit" ng-click="editPage(pg._id)" class="edit-link"><i class="glyphicon glyphicon-pencil"></i></a>&nbsp;<a ng-if="isEdit" ng-click="removePage(pg._id)"><i class="glyphicon glyphicon-trash"></i></a></label>
         </div>
-        <div class="page-items">
-          <div class="ec-tree" ng-repeat="ac in pg.actionList track by $index" ng-class="{true: 'active-current', false: 'inactive'}[currentAction.id == ac.id]">
-            <a ng-click="chooseAction(ac.id)">{{$index}} {{ac.title}}</a>
-            <a ng-click="editAction(ac.id)" class="edit-link" ng-if="isEdit"><i class="glyphicon glyphicon-pencil"></i></a>
-            <a ng-click="removeAction(ac.id)" ng-if="isEdit"><i class="glyphicon glyphicon-trash"></i></a>
-          </div>
-          <div class="ec-tree more-empty" ng-if="isEdit"><a class="btn btn-info btn-xs" ng-click="showNewAction(pg.id)"><i class="glyphicon glyphicon-plus"></i>添加接口</a></div>
-        </div>
-      </div>
     </div>
-    <div class="right-content" ng-if="currentAction.id != undefined">
-      <div>
-      </div>
-      <div class="tool-btn-box">
-        <button class="btn btn-danger btn-xs" ng-click="favourite()" ng-if="viewState">添加订阅</button>
-        <button class="btn btn-danger btn-xs" ng-click="getHistory()">历史列表</button>
-      </div>
-      <h2> <div id="div-w-message" class="label label-success btn-xs" ng-if="!viewState">历史版本</div>接口详情 &nbsp;&nbsp;<a title="订阅" ><span ng-class="{true: 'glyphicon-star subscription', false: 'glyphicon-star-empty'}[isFavourite]" class="glyphicon "></span></a><span> &nbsp;&nbsp;&nbsp;&nbsp;
+    <div class="content-box">
+        <div class="left-tree">
+            <div class="page-item-box" ng-repeat="pg in pageList track by $index">
+                <div class="page-item ec-tree">
+                    <label>{{pg.name}}&nbsp;&nbsp;<a ng-if="isEdit" ng-click="editPage(pg._id)" class="edit-link"><i class="glyphicon glyphicon-pencil"></i></a>&nbsp;<a ng-if="isEdit" ng-click="removePage(pg._id)"><i class="glyphicon glyphicon-trash"></i></a></label>
+                </div>
+                <div class="page-items">
+                    <div class="ec-tree" ng-repeat="ac in pg.actionList track by $index" ng-class="{true: 'active-current', false: 'inactive'}[currentAction.id == ac.id]">
+                        <a ng-click="chooseAction(ac.id)">{{$index}} {{ac.title}}</a>
+                        <a ng-click="editAction(ac.id)" class="edit-link" ng-if="isEdit"><i class="glyphicon glyphicon-pencil"></i></a>
+                        <a ng-click="removeAction(ac.id)" ng-if="isEdit"><i class="glyphicon glyphicon-trash"></i></a>
+                    </div>
+                    <div class="ec-tree more-empty" ng-if="isEdit"><a class="btn btn-info btn-xs" ng-click="showNewAction(pg.id)"><i class="glyphicon glyphicon-plus"></i>添加接口</a></div>
+                </div>
+            </div>
+        </div>
+        <div class="right-content" ng-if="currentAction.id != undefined">
+            <div>
+            </div>
+            <div class="tool-btn-box">
+                <button class="btn btn-success btn-xs" ng-click="favourite()" ng-if="viewState">添加订阅</button>
+                <button class="btn btn-success btn-xs" ng-click="getHistory()">历史列表</button>
+            </div>
+            <h2> <div id="div-w-message" class="label label-success btn-xs" ng-if="!viewState">历史版本</div>接口详情 &nbsp;&nbsp;<a title="订阅" ><span ng-class="{true: 'glyphicon-star subscription', false: 'glyphicon-star-empty'}[isFavourite]" class="glyphicon "></span></a><span> &nbsp;&nbsp;&nbsp;&nbsp;
             <!-- <button class="btn btn-danger btn-xs" >Mock数据</button> -->
             </span> </h2>
-      <div class="action-info " ng-click="editAction(currentAction.id)">
-        <div class="item">
-          <b>接口名称 </b>{{currentAction.title}}
-        </div>
-        <div class="item"><b>请求类型 </b>
-          <font color="orange">{{currentAction.method}}</font>
-        </div>
-        <div class="item"><b>请求Url </b>
-          <font color="blue"> {{currentAction.url}}</font>
-        </div>
-        <div class="item"><b>网络协议 </b>
-          <font color="blue"> {{currentAction.protocol}}</font>
-        </div>
-      </div>
-      <div class="action-info">
-        <div class="item clearfix">
-          <b>产品线 </b>
-          <a class="crumb-select-item" title="其它" ng-repeat="pro in currentAction.products">
-            <!-- <b>画幅：</b> -->
-            <em>{{pro.name}}</em>
-            <i ng-if="isEdit" ng-click="rmProduct(pro._id)"></i>
-          </a>
-          <div class="btn-group" ng-if="isEdit">
-            <div class="btn-group">
-              <button type="button" class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown">
-                              {{productVersions.name}}
-                              <span class="caret"></span>
-                          </button>
-              <ul class="dropdown-menu" role="menu">
-                <li ng-repeat="product in productList" ng-class="{true: 'dropdown-submenu', false: ''}[product.productVersions.length >0]">
-                  <a href="javascript:;">{{product.name}}</a>
-                  <ul class="dropdown-menu" ng-if="product.productVersions.length >0">
-                    <li ng-repeat="v in product.productVersions" ng-class="{true: 'disabled', false: ''}[v.exist]"> <a ng-disabled="v.exist" ng-click="productChange(v)">{{v.name}}</a></li>
-                  </ul>
-                </li>
-              </ul>
-            </div>
-            <button type="button" class="btn btn-xs btn-default" ng-click="addProduct(productVersions)">添加{{version.productVersions[0].name}}</button>
-          </div>
-        </div>
-
-        <div class="item clearfix">
-          <b>标签 </b>
-          <a class="crumb-select-item" title="其它" ng-repeat="pro in currentAction.tags">
-            <!-- <b>画幅：</b> -->
-            <em>{{pro.name}}</em>
-            <i ng-if="isEdit" ng-click="rmTag(pro._id)"></i>
-          </a>
-          <div class="btn-group" ng-if="isEdit">
-            <div class="btn-group">
-              <button type="button" class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown">
-                              {{tag.name}}
-                              <span class="caret"></span>
-                          </button>
-              <ul class="dropdown-menu" role="menu">
-                <li ng-repeat="tag in tagList" ng-class="{true: 'disabled', false: ''}[tag.isExist]">
-                  <a ng-disabled="tag.isExist"  ng-click="tagChange(tag)" href="javascript:;">{{tag.name}}</a>
-                </li>
-              </ul>
-            </div>
-            <button type="button" class="btn btn-xs btn-default" ng-class="{true: 'disabled', false: ''}[tag.isExist]"  ng-click="addTag(tag)">添加</button>
-          </div>
-        </div>
-
-
-      </div>
-      <div ng-if="currentAction.param.requestParameter.length > 0 || isEdit" class="param-item">
-        <h2>请求参数列表<button class="btn btn-info btn-xs margin15" ng-click="addParam('reqParam')" ng-if="isEdit">添加参数</button><button class="btn btn-danger btn-xs" ng-click="importJson('reqParam')" ng-if="isEdit">导入json</button></h2>
-        <table class="table table-striped">
-          <tbody>
-            <tr class="head">
-              <td class="head-expander"></td>
-              <td class="head-identifier">变量名</td>
-              <td class="head-name">含义</td>
-              <td class="head-type">类型</td>
-              <td class="head-remark">备注</td>
-            </tr>
-            <tr class="tr-param" ng-repeat="rp in currentAction.param.requestParameter track by $index">
-              <td class="expander">
-                <div class="div-op-container" ng-if="isEdit">
-                  <a ng-click="removeParam(rp.id, 'reqParam')"><i class="glyphicon glyphicon-remove"></i></a>
-                  <!-- <a ng-click="addParam('child', rp.id)"><i class="glyphicon glyphicon-plus"></i></a> -->
+            <div class="action-info " ng-click="editAction(currentAction.id)">
+                <div class="item">
+                    <b>接口名称 </b>{{currentAction.title}}
                 </div>
-              </td>
-              <td class="td-param identifier" style="padding-left:{{rp.pNum*14+1}}px;width: 25%;">
-                <input type="text" ng-model="rp.identifier" ng-if="isEdit"><span ng-if="!isEdit">{{rp.identifier}}</span></td>
-              <td class="td-param name">
-                <input type="text" ng-model="rp.name" ng-if="isEdit"><span ng-if="!isEdit">{{rp.name}}</span></td>
-              <td class="td-param dataType">
-                <span ng-if="!isEdit">{{rp.dataType}}</span>
-                <select id="select-dataType-768521" ng-if="isEdit" class="select-dataType" ng-model="rp.dataType" ng-selected="rp.dataType">
+                <div class="item"><b>请求类型 </b>
+                    <font color="orange">{{currentAction.method}}</font>
+                </div>
+                <div class="item"><b>请求Url </b>
+                    <font color="blue"> {{currentAction.url}}</font>
+                </div>
+                <div class="item"><b>网络协议 </b>
+                    <font color="blue"> {{currentAction.protocol}}</font>
+                </div>
+            </div>
+            <div class="action-info">
+                <div class="item clearfix">
+                    <b ng-if="!isEdit">产品线 </b>
+                    <tags-input ng-if="isEdit" ng-model="currentAction.products" display-property="displayName" placeholder="选择产品线" replace-spaces-with-dashes="false" template="product-template" min-length="0">
+                        <auto-complete source="loadProducts($query)" min-length="0" load-on-focus="true" load-on-empty="true" max-results-to-show="32" template="autocompleteProduct-template"></auto-complete>
+                    </tags-input>
+                    <script type="text/ng-template" id="product-template">
+                        <div class="tag-template">
+                            <div class="right-panel">
+                                <span>{{$getDisplayText()}}</span>
+                                <a class="remove-button" ng-click="$removeTag()">&#10006;</a>
+                            </div>
+                        </div>
+                    </script>
+                    <script type="text/ng-template" id="autocompleteProduct-template">
+                        <div class="autocomplete-template">
+                            <div class="right-panel">
+                                <span ng-bind-html="$highlight($getDisplayText())"></span>
+                            </div>
+                        </div>
+                    </script>
+                    <span ng-if="!isEdit" ng-repeat="pro in currentAction.products" class="label  {{labelCss[$index % 6]}}">{{pro.displayName}}</span>
+                </div>
+                <div class="item clearfix">
+                    <b ng-if="!isEdit">标签 </b>
+                    <tags-input ng-if="isEdit" ng-model="currentAction.tags" display-property="name" placeholder="选择标签" replace-spaces-with-dashes="false" template="tag-template" min-length="0">
+                    <auto-complete source="loadTags($query)" min-length="0" load-on-focus="true" load-on-empty="true" max-results-to-show="32" template="autocomplete-template"></auto-complete>
+                </tags-input>
+                <script type="text/ng-template" id="tag-template">
+                    <div class="tag-template">
+                        <div class="right-panel">
+                            <span>{{$getDisplayText()}}</span>
+                            <a class="remove-button" ng-click="$removeTag()">&#10006;</a>
+                        </div>
+                    </div>
+                </script>
+                <script type="text/ng-template" id="autocomplete-template">
+                    <div class="autocomplete-template">
+                        <div class="right-panel">
+                            <span ng-bind-html="$highlight($getDisplayText())"></span>
+                        </div>
+                    </div>
+                </script>
+                     
+                    <span ng-if="!isEdit" ng-repeat="pro in currentAction.tags" class="label  {{labelCss[$index % 6]}}">{{pro.name}}</span>
+                </div>
+            </div>
+            <div ng-if="currentAction.param.requestParameter.length > 0 || isEdit" class="param-item">
+                <h2>请求参数列表<button class="btn btn-info btn-xs margin15" ng-click="addParam('reqParam')" ng-if="isEdit">添加参数</button><button class="btn btn-danger btn-xs" ng-click="importJson('reqParam')" ng-if="isEdit">导入json</button></h2>
+                <table class="table table-striped">
+                    <tbody>
+                        <tr class="head">
+                            <td class="head-expander"></td>
+                            <td class="head-identifier">变量名</td>
+                            <td class="head-name">含义</td>
+                            <td class="head-type">类型</td>
+                            <td class="head-remark">备注</td>
+                        </tr>
+                        <tr class="tr-param" ng-repeat="rp in currentAction.param.requestParameter track by $index">
+                            <td class="expander">
+                                <div class="div-op-container" ng-if="isEdit">
+                                    <a ng-click="removeParam(rp.id, 'reqParam')"><i class="glyphicon glyphicon-remove"></i></a>
+                                    <!-- <a ng-click="addParam('child', rp.id)"><i class="glyphicon glyphicon-plus"></i></a> -->
+                                </div>
+                            </td>
+                            <td class="td-param identifier" style="padding-left:{{rp.pNum*14+1}}px;width: 25%;">
+                                <input type="text" ng-model="rp.identifier" ng-if="isEdit"><span ng-if="!isEdit">{{rp.identifier}}</span></td>
+                            <td class="td-param name">
+                                <input type="text" ng-model="rp.name" ng-if="isEdit"><span ng-if="!isEdit">{{rp.name}}</span></td>
+                            <td class="td-param dataType">
+                                <span ng-if="!isEdit">{{rp.dataType}}</span>
+                                <select id="select-dataType-768521" ng-if="isEdit" class="select-dataType" ng-model="rp.dataType" ng-selected="rp.dataType">
                                     <option value=""></option>
                                     <option value="number">number</option>
                                     <option value="string">string</option>
                                     <option value="boolean">boolean</option>
                                 </select>
-              </td>
-              <td class="td-param remark">
-                <input type="text" ng-model="rp.remark" ng-if="isEdit"> <span ng-if="!isEdit">{{rp.remark}}</span></td>
-            </tr>
-            <!-- <tr class="tr-param" >
+                            </td>
+                            <td class="td-param remark">
+                                <input type="text" ng-model="rp.remark" ng-if="isEdit"> <span ng-if="!isEdit">{{rp.remark}}</span></td>
+                        </tr>
+                        <!-- <tr class="tr-param" >
                         <td class="expander"></td>
                         <td id="td-param-identifier-702199" class="td-param identifier">aaa</td>
                         <td id="td-param-name-702199" class="td-param name">aaa</td>
                         <td id="td-param-dataType-702199" class="td-param dataType">object</td>
                         <td id="td-param-remark-702199" class="td-param remark">aaaa</td>
                     </tr> -->
-          </tbody>
-        </table>
-      </div>
-      <div ng-if="currentAction.param.requestData.length > 0 || isEdit" class="param-item">
-        <h2>请求数据列表<button class="btn btn-info btn-xs margin15" ng-click="addParam('reqData')" ng-if="isEdit">添加参数</button><button class="btn btn-danger btn-xs" ng-click="importJson('reqData')" ng-if="currentAction.requestDataType =='raw' && isEdit">导入json</button></h2>
-        <h5><div ng-if="!isEdit">请求数据类型：{{currentAction.requestDataType}}</div></h5>
-        <div class="RadioGroup" ng-if="isEdit">
-          &nbsp;&nbsp;&nbsp;
-          <label class="radio-inline">
+                    </tbody>
+                </table>
+            </div>
+            <div ng-if="currentAction.param.requestData.length > 0 || isEdit" class="param-item">
+                <h2>请求数据列表<button class="btn btn-info btn-xs margin15" ng-click="addParam('reqData')" ng-if="isEdit">添加参数</button><button class="btn btn-danger btn-xs" ng-click="importJson('reqData')" ng-if="currentAction.requestDataType =='raw' && isEdit">导入json</button></h2>
+                <h5><div ng-if="!isEdit">请求数据类型：{{currentAction.requestDataType}}</div></h5>
+                <div class="RadioGroup" ng-if="isEdit">
+                    &nbsp;&nbsp;&nbsp;
+                    <label class="radio-inline">
                         <input type="radio" name="type" value="form-data" ng-checked="currentAction.requestDataType =='form-data'" ng-model="currentAction.requestDataType"> form-data
                     </label>
-          <label class="radio-inline">
+                    <label class="radio-inline">
                         <input type="radio" name="type" value="x-www-from-urlencoded" ng-checked="currentAction.requestDataType =='x-www-from-urlencoded'" ng-model="currentAction.requestDataType"> x-www-from-urlencoded
                     </label>
-          <label class="radio-inline">
+                    <label class="radio-inline">
                         <input type="radio" name="type" value="raw" ng-checked="currentAction.requestDataType =='raw'" ng-model="currentAction.requestDataType"> raw
                     </label>
-        </div>
-        <table class="table">
-          <tbody>
-            <tr class="head">
-              <td class="head-expander"></td>
-              <td class="head-identifier">变量名</td>
-              <td class="head-name">含义</td>
-              <td class="head-type">类型</td>
-              <td class="head-remark">备注</td>
-            </tr>
-            <tr class="tr-param" ng-repeat="rp in currentAction.param.requestData track by $index">
-              <td class="expander">
-                <div class="div-op-container" ng-if="isEdit">
-                  <a ng-click="removeParam(rp.id, 'reqData')"><i class="glyphicon glyphicon-remove"></i></a>
-                  <a ng-if="rp.dataType=='object' || rp.dataType=='array<object>' || rp.dataType=='array<number>' || rp.dataType=='array<string>' || rp.dataType=='array<boolean>'" ng-click="addParam('child', rp.id, 'reqData')"><i class="glyphicon glyphicon-plus"></i></a>
                 </div>
-              </td>
-              <td class="td-param identifier" style="padding-left:{{rp.pNum*14+1}}px;width: 25%;">
-                <input type="text" ng-model="rp.identifier" ng-if="isEdit"><span ng-if="!isEdit">{{rp.identifier}}</span></td>
-              <td class="td-param name">
-                <input type="text" ng-model="rp.name" ng-if="isEdit"><span ng-if="!isEdit">{{rp.parentsIdList.length}}{{rp.name}}</span></td>
-              <td class="td-param dataType">
-                <span ng-if="!isEdit">{{rp.dataType}}</span>
-                <select id="select-dataType-768521" ng-if="isEdit" class="select-dataType" ng-model="rp.dataType" ng-selected="rp.dataType">
+                <table class="table">
+                    <tbody>
+                        <tr class="head">
+                            <td class="head-expander"></td>
+                            <td class="head-identifier">变量名</td>
+                            <td class="head-name">含义</td>
+                            <td class="head-type">类型</td>
+                            <td class="head-remark">备注</td>
+                        </tr>
+                        <tr class="tr-param" ng-repeat="rp in currentAction.param.requestData track by $index">
+                            <td class="expander">
+                                <div class="div-op-container" ng-if="isEdit">
+                                    <a ng-click="removeParam(rp.id, 'reqData')"><i class="glyphicon glyphicon-remove"></i></a>
+                                    <a ng-if="rp.dataType=='object' || rp.dataType=='array<object>' || rp.dataType=='array<number>' || rp.dataType=='array<string>' || rp.dataType=='array<boolean>'" ng-click="addParam('child', rp.id, 'reqData')"><i class="glyphicon glyphicon-plus"></i></a>
+                                </div>
+                            </td>
+                            <td class="td-param identifier" style="padding-left:{{rp.pNum*14+1}}px;width: 25%;">
+                                <input type="text" ng-model="rp.identifier" ng-if="isEdit"><span ng-if="!isEdit">{{rp.identifier}}</span></td>
+                            <td class="td-param name">
+                                <input type="text" ng-model="rp.name" ng-if="isEdit"><span ng-if="!isEdit">{{rp.parentsIdList.length}}{{rp.name}}</span></td>
+                            <td class="td-param dataType">
+                                <span ng-if="!isEdit">{{rp.dataType}}</span>
+                                <select id="select-dataType-768521" ng-if="isEdit" class="select-dataType" ng-model="rp.dataType" ng-selected="rp.dataType">
                                     <option value=""></option>
                                     <option value="number">number</option>
                                     <option value="string">string</option>
@@ -204,38 +199,38 @@
                                     <option value="array<boolean>">array&lt;boolean&gt;</option>
                                     <option value="array">array</option>
                                 </select>
-              </td>
-              <td class="td-param remark">
-                <input type="text" ng-model="rp.remark" ng-if="isEdit"> <span ng-if="!isEdit">{{rp.remark}}</span></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <div ng-if="currentAction.param.responseData.length > 0 || isEdit" class="param-item">
-        <h2>响应参数列表<button class="btn btn-info btn-xs margin15" ng-click="addParam('resData')" ng-if="isEdit">添加参数</button><button class="btn btn-danger btn-xs" ng-click="importJson('resData')" ng-if="isEdit">导入json</button></h2>
-        <table class="table">
-          <tbody>
-            <tr class="head">
-              <td class="head-expander"></td>
-              <td class="head-identifier">变量名</td>
-              <td class="head-name">含义</td>
-              <td class="head-type">类型</td>
-              <td class="head-remark">备注</td>
-            </tr>
-            <tr class="tr-param" ng-repeat="rp in currentAction.param.responseData track by $index">
-              <td class="expander">
-                <div class="div-op-container" ng-if="isEdit">
-                  <a ng-click="removeParam(rp.id, 'resData')"><i class="glyphicon glyphicon-remove"></i></a>
-                  <a ng-if="rp.dataType=='object' || rp.dataType=='array<object>' || rp.dataType=='array<number>' || rp.dataType=='array<string>' || rp.dataType=='array<boolean>'" ng-click="addParam('child', rp.id, 'resData')"><i class="glyphicon glyphicon-plus"></i></a>
-                </div>
-              </td>
-              <td class="td-param identifier" style="padding-left:{{rp.pNum*14+1}}px;width: 25%;">
-                <input type="text" ng-model="rp.identifier" ng-if="isEdit"><span ng-if="!isEdit">{{rp.identifier}}</span></td>
-              <td class="td-param name">
-                <input type="text" ng-model="rp.name" ng-if="isEdit"><span ng-if="!isEdit">{{rp.name}}</span></td>
-              <td class="td-param dataType">
-                <span ng-if="!isEdit">{{rp.dataType}}</span>
-                <select id="select-dataType-768521" ng-if="isEdit" class="select-dataType" ng-model="rp.dataType" ng-selected="rp.dataType">
+                            </td>
+                            <td class="td-param remark">
+                                <input type="text" ng-model="rp.remark" ng-if="isEdit"> <span ng-if="!isEdit">{{rp.remark}}</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div ng-if="currentAction.param.responseData.length > 0 || isEdit" class="param-item">
+                <h2>响应参数列表<button class="btn btn-info btn-xs margin15" ng-click="addParam('resData')" ng-if="isEdit">添加参数</button><button class="btn btn-danger btn-xs" ng-click="importJson('resData')" ng-if="isEdit">导入json</button></h2>
+                <table class="table">
+                    <tbody>
+                        <tr class="head">
+                            <td class="head-expander"></td>
+                            <td class="head-identifier">变量名</td>
+                            <td class="head-name">含义</td>
+                            <td class="head-type">类型</td>
+                            <td class="head-remark">备注</td>
+                        </tr>
+                        <tr class="tr-param" ng-repeat="rp in currentAction.param.responseData track by $index">
+                            <td class="expander">
+                                <div class="div-op-container" ng-if="isEdit">
+                                    <a ng-click="removeParam(rp.id, 'resData')"><i class="glyphicon glyphicon-remove"></i></a>
+                                    <a ng-if="rp.dataType=='object' || rp.dataType=='array<object>' || rp.dataType=='array<number>' || rp.dataType=='array<string>' || rp.dataType=='array<boolean>'" ng-click="addParam('child', rp.id, 'resData')"><i class="glyphicon glyphicon-plus"></i></a>
+                                </div>
+                            </td>
+                            <td class="td-param identifier" style="padding-left:{{rp.pNum*14+1}}px;width: 25%;">
+                                <input type="text" ng-model="rp.identifier" ng-if="isEdit"><span ng-if="!isEdit">{{rp.identifier}}</span></td>
+                            <td class="td-param name">
+                                <input type="text" ng-model="rp.name" ng-if="isEdit"><span ng-if="!isEdit">{{rp.name}}</span></td>
+                            <td class="td-param dataType">
+                                <span ng-if="!isEdit">{{rp.dataType}}</span>
+                                <select id="select-dataType-768521" ng-if="isEdit" class="select-dataType" ng-model="rp.dataType" ng-selected="rp.dataType">
                                     <option value=""></option>
                                     <option value="number">number</option>
                                     <option value="string">string</option>
@@ -247,197 +242,196 @@
                                     <option value="array<boolean>">array&lt;boolean&gt;</option>
                                     <option value="array">array</option>
                                 </select>
-              </td>
-              <td class="td-param remark">
-                <input type="text" ng-model="rp.remark" ng-if="isEdit"> <span ng-if="!isEdit">{{rp.remark}}</span></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <div ng-if="currentAction.param.requestHeader.length > 0 || isEdit" class="param-item">
-        <h2>请求头<button class="btn btn-info btn-xs margin15" ng-click="addParam('reqHeader')" ng-if="isEdit">添加参数</button><button class="btn btn-danger btn-xs" ng-click="importJson('reqHeader')" ng-if="isEdit">导入json</button></h2>
-        <table class="table">
-          <tbody>
-            <tr class="head">
-              <td class="head-expander"></td>
-              <td class="head-identifier">变量名</td>
-              <td class="head-name">含义</td>
-              <td class="head-type">类型</td>
-              <td class="head-remark">备注</td>
-            </tr>
-            <tr class="tr-param" ng-repeat="rp in currentAction.param.requestHeader track by $index">
-              <td class="expander">
-                <div class="div-op-container" ng-if="isEdit">
-                  <a ng-click="removeParam(rp.id, 'reqHeader')"><i class="glyphicon glyphicon-remove"></i></a>
-                  <!-- <a ng-click="addParam('child', rp.id)"><i class="glyphicon glyphicon-plus"></i></a> -->
-                </div>
-              </td>
-              <td class="td-param identifier" style="padding-left:{{rp.parentsIdList.length*14+1}}px;width: 25%;">
-                <input type="text" ng-model="rp.identifier" ng-if="isEdit"><span ng-if="!isEdit">{{rp.identifier}}</span></td>
-              <td class="td-param name">
-                <input type="text" ng-model="rp.name" ng-if="isEdit"><span ng-if="!isEdit">{{rp.name}}</span></td>
-              <td class="td-param dataType">
-                <span ng-if="!isEdit">{{rp.dataType}}</span>
-                <select id="select-dataType-768521" ng-if="isEdit" class="select-dataType" ng-model="rp.dataType" ng-selected="rp.dataType">
+                            </td>
+                            <td class="td-param remark">
+                                <input type="text" ng-model="rp.remark" ng-if="isEdit"> <span ng-if="!isEdit">{{rp.remark}}</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div ng-if="currentAction.param.requestHeader.length > 0 || isEdit" class="param-item">
+                <h2>请求头<button class="btn btn-info btn-xs margin15" ng-click="addParam('reqHeader')" ng-if="isEdit">添加参数</button><button class="btn btn-danger btn-xs" ng-click="importJson('reqHeader')" ng-if="isEdit">导入json</button></h2>
+                <table class="table">
+                    <tbody>
+                        <tr class="head">
+                            <td class="head-expander"></td>
+                            <td class="head-identifier">变量名</td>
+                            <td class="head-name">含义</td>
+                            <td class="head-type">类型</td>
+                            <td class="head-remark">备注</td>
+                        </tr>
+                        <tr class="tr-param" ng-repeat="rp in currentAction.param.requestHeader track by $index">
+                            <td class="expander">
+                                <div class="div-op-container" ng-if="isEdit">
+                                    <a ng-click="removeParam(rp.id, 'reqHeader')"><i class="glyphicon glyphicon-remove"></i></a>
+                                    <!-- <a ng-click="addParam('child', rp.id)"><i class="glyphicon glyphicon-plus"></i></a> -->
+                                </div>
+                            </td>
+                            <td class="td-param identifier" style="padding-left:{{rp.parentsIdList.length*14+1}}px;width: 25%;">
+                                <input type="text" ng-model="rp.identifier" ng-if="isEdit"><span ng-if="!isEdit">{{rp.identifier}}</span></td>
+                            <td class="td-param name">
+                                <input type="text" ng-model="rp.name" ng-if="isEdit"><span ng-if="!isEdit">{{rp.name}}</span></td>
+                            <td class="td-param dataType">
+                                <span ng-if="!isEdit">{{rp.dataType}}</span>
+                                <select id="select-dataType-768521" ng-if="isEdit" class="select-dataType" ng-model="rp.dataType" ng-selected="rp.dataType">
                                     <option value=""></option>
                                     <option value="number">number</option>
                                     <option value="string">string</option>
                                     <option value="boolean">boolean</option>
                                 </select>
-              </td>
-              <td class="td-param remark">
-                <input type="text" ng-model="rp.remark" ng-if="isEdit"> <span ng-if="!isEdit">{{rp.remark}}</span></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <div ng-if="currentAction.remarks || isEdit" class="param-item">
-        <h2>备注</h2>
-        <div class="textarea-div">
-          <textarea ng-disabled="!isEdit" ng-model="currentAction.remarks" style='overflow:scroll;overflow-y:hidden;overflow-x:hidden'
-          ></textarea>
+                            </td>
+                            <td class="td-param remark">
+                                <input type="text" ng-model="rp.remark" ng-if="isEdit"> <span ng-if="!isEdit">{{rp.remark}}</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div ng-if="currentAction.remarks || isEdit" class="param-item">
+                <h2>备注</h2>
+                <div class="textarea-div">
+                    <textarea ng-disabled="!isEdit" ng-model="currentAction.remarks" style='overflow:scroll;overflow-y:hidden;overflow-x:hidden'></textarea>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
 </div>
 <div id="modal1" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="exampleModalLabel">添加项目</h4>
-      </div>
-      <div class="modal-body">
-        <form>
-          <div class="form-group">
-            <label for="message-text" class="control-label">说明:</label>
-            <textarea class="form-control" style="height: 500px;" ng-model="reqHeadJson" id="message-text"></textarea>
-          </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-        <button type="button" class="btn btn-primary" ng-click="doImportJSON()">保存</button>
-      </div>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">添加项目</h4>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="message-text" class="control-label">说明:</label>
+                        <textarea class="form-control" style="height: 500px;" ng-model="reqHeadJson" id="message-text"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" ng-click="doImportJSON()">保存</button>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
 <div id="modal2" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="exampleModalLabel">添加模块</h4>
-      </div>
-      <div class="modal-body">
-        <form>
-          <div class="form-group">
-            <label for="recipient-name" class="control-label">名称:</label>
-            <input type="text" ng-model="newPage.name" class="form-control" id="recipient-name">
-          </div>
-          <div class="form-group">
-            <label for="message-text" class="control-label">说明:</label>
-            <textarea class="form-control" ng-model="newPage.description" id="message-text"></textarea>
-          </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-        <button type="button" class="btn btn-primary" ng-click="addPage()">保存</button>
-      </div>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">添加模块</h4>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="recipient-name" class="control-label">名称:</label>
+                        <input type="text" ng-model="newPage.name" class="form-control" id="recipient-name">
+                    </div>
+                    <div class="form-group">
+                        <label for="message-text" class="control-label">说明:</label>
+                        <textarea class="form-control" ng-model="newPage.description" id="message-text"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" ng-click="addPage()">保存</button>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
 <div id="modal3" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="exampleModalLabel">添加新接口</h4>
-      </div>
-      <div class="modal-body">
-        <form>
-          <div class="form-group">
-            <label for="recipient-name" class="control-label">名称:</label>
-            <input type="text" ng-model="newAction.title" class="form-control" id="recipient-name">
-          </div>
-          <div class="form-group">
-            <label for="recipient-name" class="control-label">请求类型:</label>
-            <div class="radio-list clearfix" id="recipient-name">
-              <input type="radio" id="editAFloater-type-1" name="editAFloater-type" ng-model="newAction.method" value="get" ng-checked="newAction.method == 'get'" checked>
-              <label for="editAFloater-type-1">GET</label>
-              <input type="radio" id="editAFloater-type-2" name="editAFloater-type" ng-model="newAction.method" value="post" ng-checked="newAction.method == 'post'">
-              <label for="editAFloater-type-2">POST</label>
-              <input type="radio" id="editAFloater-type-3" name="editAFloater-type" ng-model="newAction.method" value="put" ng-checked="newAction.method == 'put'">
-              <label for="editAFloater-type-3">PUT</label>
-              <input type="radio" id="editAFloater-type-4" name="editAFloater-type" ng-model="newAction.method" value="delete" ng-checked="newAction.method == 'delete'">
-              <label for="editAFloater-type-4">DELETE</label>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">添加新接口</h4>
             </div>
-          </div>
-          <div class="form-group" ng-init="newAction.protocol = 'https'">
-            <label for="recipient-name" class="control-label">网络协议类型:</label>
-            <div class="radio-list clearfix" id="recipient-name">
-              <input type="radio" id="protocol-type-1" name="protocol-type" ng-model="newAction.protocol" value="http" ng-checked="newAction.protocol == 'http'" checked>
-              <label for="protocol-type-1">HTTP</label>
-              <input type="radio" id="protocol-type-2" name="protocol-type" ng-model="newAction.protocol" value="https" ng-checked="newAction.protocol == 'https'">
-              <label for="protocol-type-2">HTTPS</label>
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="recipient-name" class="control-label">请求链接:</label>
-            <input type="text" ng-model="newAction.url" class="form-control" id="recipient-name">
-          </div>
-          <div class="form-group">
-            <label for="message-text" class="control-label">说明:</label>
-            <textarea class="form-control" ng-model="newAction.description" id="message-text"></textarea>
-          </div>
-          <!--  <div class="form-group">
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="recipient-name" class="control-label">名称:</label>
+                        <input type="text" ng-model="newAction.title" class="form-control" id="recipient-name">
+                    </div>
+                    <div class="form-group">
+                        <label for="recipient-name" class="control-label">请求类型:</label>
+                        <div class="radio-list clearfix" id="recipient-name">
+                            <input type="radio" id="editAFloater-type-1" name="editAFloater-type" ng-model="newAction.method" value="get" ng-checked="newAction.method == 'get'" checked>
+                            <label for="editAFloater-type-1">GET</label>
+                            <input type="radio" id="editAFloater-type-2" name="editAFloater-type" ng-model="newAction.method" value="post" ng-checked="newAction.method == 'post'">
+                            <label for="editAFloater-type-2">POST</label>
+                            <input type="radio" id="editAFloater-type-3" name="editAFloater-type" ng-model="newAction.method" value="put" ng-checked="newAction.method == 'put'">
+                            <label for="editAFloater-type-3">PUT</label>
+                            <input type="radio" id="editAFloater-type-4" name="editAFloater-type" ng-model="newAction.method" value="delete" ng-checked="newAction.method == 'delete'">
+                            <label for="editAFloater-type-4">DELETE</label>
+                        </div>
+                    </div>
+                    <div class="form-group" ng-init="newAction.protocol = 'https'">
+                        <label for="recipient-name" class="control-label">网络协议类型:</label>
+                        <div class="radio-list clearfix" id="recipient-name">
+                            <input type="radio" id="protocol-type-1" name="protocol-type" ng-model="newAction.protocol" value="http" ng-checked="newAction.protocol == 'http'" checked>
+                            <label for="protocol-type-1">HTTP</label>
+                            <input type="radio" id="protocol-type-2" name="protocol-type" ng-model="newAction.protocol" value="https" ng-checked="newAction.protocol == 'https'">
+                            <label for="protocol-type-2">HTTPS</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="recipient-name" class="control-label">请求链接:</label>
+                        <input type="text" ng-model="newAction.url" class="form-control" id="recipient-name">
+                    </div>
+                    <div class="form-group">
+                        <label for="message-text" class="control-label">说明:</label>
+                        <textarea class="form-control" ng-model="newAction.description" id="message-text"></textarea>
+                    </div>
+                    <!--  <div class="form-group">
                         <label for="recipient-name" class="control-label">返回格式:</label>
                         <input type="text" ng-model="newAction.name" class="form-control" id="recipient-name">
                     </div> -->
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-        <button type="button" class="btn btn-primary" ng-click="addAction(newAction.pageId)">保存</button>
-      </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" ng-click="addAction(newAction.pageId)">保存</button>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
 <div id="modal4" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="exampleModalLabel">添加模块</h4>
-      </div>
-      <div class="modal-body">
-        <table class="table">
-          <tbody>
-            <tr class="head">
-              <td class="head-expander"></td>
-              <td class="head-identifier">创建时间</td>
-              <td class="head-name">创建者</td>
-              <td class="head-type">邮箱</td>
-            </tr>
-            <tr class="tr-param" ng-class="{true: 'active-item', false: ''}[chooseHisItem == apiHistory._id]" ng-repeat="apiHistory in apiHistoryList track by $index" ng-click="chooseHistory(apiHistory._id)">
-              <td class="expander"></td>
-              <td class="td-param identifier">
-                <span>{{apiHistory.updateAt}}</span></td>
-              <td class="td-param name">
-                <span>{{apiHistory.updateBy.name}}</span></td>
-              <td class="td-param dataType">
-                <span>{{apiHistory.updateBy.email}}</span></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="modal-footer">
-        <button type="button" ng-disabled="!chooseHisItem" ng-click="viewHistory()" class="btn btn-primary" data-original-title="点击后将以只读的方式查看某一版本。"><span class="glyphicon glyphicon-eye-open"></span>查看版本</button>
-        <button type="button" class="btn btn-default" data-dismiss="modal">退出</button>
-        <!-- <button type="button" class="btn btn-primary" ng-click="addPage()">保存</button> -->
-      </div>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">添加模块</h4>
+            </div>
+            <div class="modal-body">
+                <table class="table">
+                    <tbody>
+                        <tr class="head">
+                            <td class="head-expander"></td>
+                            <td class="head-identifier">创建时间</td>
+                            <td class="head-name">创建者</td>
+                            <td class="head-type">邮箱</td>
+                        </tr>
+                        <tr class="tr-param" ng-class="{true: 'active-item', false: ''}[chooseHisItem == apiHistory._id]" ng-repeat="apiHistory in apiHistoryList track by $index" ng-click="chooseHistory(apiHistory._id)">
+                            <td class="expander"></td>
+                            <td class="td-param identifier">
+                                <span>{{apiHistory.updateAt}}</span></td>
+                            <td class="td-param name">
+                                <span>{{apiHistory.updateBy.name}}</span></td>
+                            <td class="td-param dataType">
+                                <span>{{apiHistory.updateBy.email}}</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" ng-disabled="!chooseHisItem" ng-click="viewHistory()" class="btn btn-primary" data-original-title="点击后将以只读的方式查看某一版本。"><span class="glyphicon glyphicon-eye-open"></span>查看版本</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">退出</button>
+                <!-- <button type="button" class="btn btn-primary" ng-click="addPage()">保存</button> -->
+            </div>
+        </div>
     </div>
-  </div>
 </div>
