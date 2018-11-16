@@ -7,18 +7,21 @@
         <div ng-repeat="product in productList track by $index">
             <div>
                 <label class="title">{{product.name}}</label><span class="product-num"> 版本数量：{{product.productVersions.length}}</span>
-                <div class="product-op"> <a ng-click="delete(product._id)"><span class="glyphicon glyphicon-trash"></span>删除</a>
+                <div class="product-op"> 
+                    <a class="show-products disabled" ng-if="product.productVersions.length != 0" ng-init="showVersions[$index] = false" ng-click="showProducts($index)">展开版本<span class="glyphicon glyphicon-chevron-down"></span></a>
+                    <a ng-click="delete(product._id)"><span class="glyphicon glyphicon-trash"></span>删除</a>
+                    <a ng-click="openEditProductModal(product._id)"><span class="glyphicon glyphicon-edit"></span>编辑</a>
                     <a ng-click="openVersionModal(product._id,$index)"><span class="glyphicon glyphicon-plus"></span>添加版本</a>
-                    <a class="show-products" ng-init="showVersions[$index] = false" ng-click="showProducts($index)">展开版本<span class="glyphicon glyphicon-chevron-down"></span></a></div>
+                   </div>
             </div>
             <hr/>
             <div ng-if="showVersions[$index]">
                 <table class="table">
                     <tr ng-repeat="version in product.productVersions">
-                        <td >{{version.name}}</td>
-                        <td >接口数量：100</td>
-                        <td >{{version.updateAt | date:'yyyy-MM-dd HH:mm' }}</td>
-                        <td >  
+                        <td>{{version.name}}</td>
+                        <td>接口数量：100</td>
+                        <td>{{version.updateAt | date:'yyyy-MM-dd HH:mm' }}</td>
+                        <td>
                             <a ng-click="deleteVersion(version._id)"><span class="glyphicon glyphicon-trash"></span>删除</a>
                             <a ng-click="editVersionModal(version._id)"><span class="glyphicon glyphicon-edit"></span>编辑</a>
                         </td>
@@ -26,8 +29,17 @@
                 </table>
             </div>
         </div>
+        <div class="pagination pagination-small" id="pager" ng-if="page.totalPage != 0">
+            <ul class="pagination pagination-sm">
+                <li ng-click="changePage(1)" ng-class="{'disabled':page.currPage == 1}"><a>首页</a></li>
+                <li ng-click="changePage(page.currPage - 1)" ng-class="{'disabled':page.currPage == 1}"><a>上一页</a></li>
+                <li ng-click="changePage(showPage)" ng-class="{'active':showPage == page.currPage}" class="pageno" ng-repeat="showPage in page.showPages track by $index"><a>{{showPage}}</a></li>
+                <li ng-click="changePage(page.currPage + 1)" ng-class="{'disabled':page.currPage == page.totalPage}"><a>下一页</a></li>
+                <li ng-click="changePage(page.totalPage)" ng-class="{'disabled':page.currPage == page.totalPage}"><a>末页</a></li>
+                <li style="margin-top:3px;" class="disabled"><a>共{{page.totalPage}}页</a></li>
+            </ul>
+        </div>
     </div>
-</div>
 </div>
 <!--begin 新增产品线 -->
 <div id="versionModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
@@ -37,23 +49,31 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="">添加产品线</h4>
             </div>
-            <div class="modal-body">
-                <form>
+            <form name="newVersion_form" novalidate ng-submit="addVersion(currIndex)">
+                <div class="modal-body">
                     <div class="form-group">
                         <label for="recipient-name" class="control-label">当前版名称:</label>
-                        <input type="text" ng-model="newVersion.name" class="form-control">
+                        <input type="text" name="name" ng-class="{'error':(newVersion_form.name.$invalid && submitted)}" ng-model="newVersion.name" dvalue="{{newVersion.name}}_{{newVersion.product}}" dname="version" class="form-control" ng-pattern="/^\d+\.\d+\.\d+$/" required unique>
                     </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                <button type="button" class="btn btn-primary" ng-click="addVersion(currIndex)">保存</button>
-            </div>
+                    <div class="error" ng-show="(newVersion_form.name.$dirty || newVersion_form.name.$invalid ) && submitted">
+                        <small class="error" ng-show="newVersion_form.name.$error.required">
+                        版本名称必填
+                    </small>
+                        <small class="error" ng-show="newVersion_form.name.$error.unique">该版本名称已经存在</small>
+                        <small class="error" ng-show="newVersion_form.name.$error.pattern">版本号格式不对，例如1.1.11</small>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="submit" class="btn btn-primary" ng-disabled="loading">
+                        <span class="glyphicon glyphicon-floppy-disk" ng-class="{'glyphicon-floppy-disk': !loading, 'glyphicon-refresh': loading,'glyphicon-refresh-animate': loading}"></span>保存
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
 <!--end 新增产品线 -->
-
 <!--begin 编辑产品线 -->
 <div id="editversionModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
     <div class="modal-dialog" role="document">
@@ -62,25 +82,32 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="">添加产品线</h4>
             </div>
-            <div class="modal-body">
-                <form>
+            <form name="editVersion_form" novalidate ng-submit="updateVersion()">
+                <div class="modal-body" ng-init="editVersion_form.name.$dirty = false">
                     <input type="hidden" ng-model="editVersion.mark" class="form-control">
                     <div class="form-group">
                         <label for="recipient-name" class="control-label">当前版名称:</label>
-                        <input type="text" ng-model="editVersion.name" class="form-control">
+                        <input type="text" name="name" ng-class="{'error':(editVersion_form.name.$invalid && submitted)}" ng-model="editVersion.name" dirty="{{editVersion_form.name.$dirty}}" dvalue="{{editVersion.name}}_{{editVersion.product}}" dname="version" class="form-control" ng-pattern="/^\d+\.\d+\.\d+$/" required unique>
                     </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                <button type="button" class="btn btn-primary" ng-click="updateVersion()">保存</button>
-            </div>
+                    <div class="error" ng-show="(editVersion_form.name.$dirty || editVersion_form.name.$invalid ) && submitted">
+                        <small class="error" ng-show="editVersion_form.name.$error.required">
+                        版本名称必填
+                    </small>
+                        <small class="error" ng-show="editVersion_form.name.$error.unique">该版本名称已经存在</small>
+                        <small class="error" ng-show="editVersion_form.name.$error.pattern">版本号格式不对，例如1.1.11</small>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="submit" class="btn btn-primary" ng-disabled="loading">
+                        <span class="glyphicon glyphicon-floppy-disk" ng-class="{'glyphicon-floppy-disk': !loading, 'glyphicon-refresh': loading,'glyphicon-refresh-animate': loading}"></span>保存
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
 <!--end 编辑产品线 -->
-
-
 <!--begin 新增产品 -->
 <div id="productModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
     <div class="modal-dialog" role="document">
@@ -89,22 +116,68 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="exampleModalLabel">添加产品</h4>
             </div>
-            <div class="modal-body">
-                <form>
+            <form name="newProduct_form" novalidate ng-submit="addProduct()">
+                <div class="modal-body">
                     <div class="form-group">
                         <label for="recipient-name" class="control-label">产品名称:</label>
-                        <input type="text" ng-model="newProduct.name" class="form-control" id="recipient-name">
+                        <input type="text" name="name" ng-class="{'error':(newProduct_form.name.$invalid && submitted)}" ng-model="newProduct.name" dvalue="{{newProduct.name}}" dname="product" class="form-control" unique required id="recipient-name">
+                    </div>
+                    <div class="error" ng-show="(newProduct_form.name.$dirty || newProduct_form.name.$invalid ) && submitted">
+                        <small class="error" ng-show="newProduct_form.name.$error.required">
+                        产品名称必填
+                    </small>
+                        <small class="error" ng-show="newProduct_form.name.$error.unique">该产品名称已经存在</small>
                     </div>
                     <!--  <div class="form-group">
                         <label for="recipient-name" class="control-label">当前版本号:</label>
                         <input type="text" ng-model="newProduct.description" class="form-control" id="recipient-name">
                     </div> -->
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                <button type="button" class="btn btn-primary" ng-click="addProduct()">保存</button>
-            </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="submit" class="btn btn-primary" ng-disabled="loading">
+                        <span class="glyphicon glyphicon-floppy-disk" ng-class="{'glyphicon-floppy-disk': !loading, 'glyphicon-refresh': loading,'glyphicon-refresh-animate': loading}"></span>保存
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
+    </div>
+    <!--end 新增产品 -->
+
+    <!--begin 编辑产品 -->
+<div id="editproductModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">添加产品</h4>
+            </div>
+            <form name="editProduct_form" novalidate ng-submit="updateProduct()">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="recipient-name" class="control-label">产品名称:</label>
+                        <input type="text" name="name" ng-class="{'error':(editProduct_form.name.$invalid && submitted)}" ng-model="editProduct.name" dvalue="{{editProduct.name}}" dname="product" class="form-control" unique required/>
+                    </div>
+                    <div class="error" ng-show="(editProduct_form.name.$dirty || editProduct_form.name.$invalid ) && submitted">
+                        <small class="error" ng-show="editProduct_form.name.$error.required">
+                            产品名称必填
+                        </small>
+                        <small class="error" ng-show="editProduct_form.name.$error.unique">该产品名称已经存在</small>
+                    </div>
+                    <!--  <div class="form-group">
+                        <label for="recipient-name" class="control-label">当前版本号:</label>
+                        <input type="text" ng-model="newProduct.description" class="form-control" id="recipient-name">
+                    </div> -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="submit" class="btn btn-primary" ng-disabled="loading">
+                        <span class="glyphicon glyphicon-floppy-disk" ng-class="{'glyphicon-floppy-disk': !loading, 'glyphicon-refresh': loading,'glyphicon-refresh-animate': loading}"></span>保存
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
     <!--end 新增产品 -->

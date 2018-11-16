@@ -30,7 +30,9 @@ exports.get = (req, res) => {
 };
 
 exports.getAll = (req, res) => {
-  Project.find().then(
+  Project.find({
+    mark: 0
+  }).then(
     projects => tools.responseSuccess(res, projects),
     err => tools.responseFailure(res, err)
   );
@@ -54,6 +56,7 @@ exports.update = (req, res) => {
   const id = req.params.id;
   const name = req.body.name;
   const domain = req.body.domain;
+  const mark = req.body.mark;
   const description = req.body.description;
   const updateAt = req.body.updateAt || new Date;
 
@@ -65,7 +68,7 @@ exports.update = (req, res) => {
     return tools.responseFailure(res, 'Invalid name');
   }
 
-  Project.findByIdAndUpdate(id, { name, description, domain, updateAt }).then(
+  Project.findByIdAndUpdate(id, { name, description, domain, updateAt, mark }).then(
     project => tools.responseSuccess(res, project),
     err => tools.responseFailure(res, err)
   );

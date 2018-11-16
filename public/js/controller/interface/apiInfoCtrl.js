@@ -1,12 +1,62 @@
 const angular = require('angular');
+const moment = require('moment');
 angular.module('apiInfo.controllers', []).controller('apiInfoCtrl', apic);
 
-function apic($scope, $state, apiInfoService, $stateParams, $q, productService) {
+function apic($scope, $state, apiInfoService, $stateParams, $q, productService, tagService) {
   var projectId = $stateParams.projectId;
   var aId = $stateParams.actionId;
+  $scope.labelCss = ['label-default', 'label-primary', 'label-success', 'label-info', 'label-warning', 'label-danger'];
   init();
+  $scope.loadTags = ($query) => {
+    var tagList = $scope.tagList;
+    return tagList.filter(function (tag) {
+      return tag.name.toLowerCase().indexOf($query.toLowerCase()) != -1;
+    });
+  };
+  $scope.loadProducts = ($query) => {
+  
+    var productVersions = $scope.productVsersions;
+     
+    return productVersions.filter(function (version) {
+      return version.displayName.toLowerCase().indexOf($query.toLowerCase()) != -1;
+    });
+  };
+  // 获取所有产品线
+  function getAllProductAndVersion() {
+    // 获取所有产品线
+    productService.getAllProducts().then(result => {
+      $scope.productList = result;
+      $scope.productVsersions = [];
+      if ($scope.productList && $scope.productList.length > 0) {
+        for (var n = 0; n < $scope.productList.length; n++) {
+          var product = $scope.productList[n];
+          var versions = product.productVersions;
+          for (var m = 0; m < versions.length; m++) {
+            var version = versions[m];
+            $scope.productVsersions.push(version);
+          }
+        }
+      }
+    }, error => {
+      alert(error);
+    });
+  }
+  // 获取所有标签
+  function getAllTag() {
+    // 获取所有标签
+    tagService.getAll().then(result => {
+      $scope.tagList = result;
+    }, error => {
+      alert(error);
+    });
+  }
   // $scope.showNav = false;
-  $scope.isEdit = false; // 是否编辑状态
+  var editFlag = $stateParams.editFlag;
+  if (editFlag == 1) {
+    $scope.isEdit = true; // 是否编辑状态
+  } else {
+    $scope.isEdit = false; // 是否编辑状态
+  }
   $scope.viewState = true; // 是否预览状态
   $scope.doesImportType = 'reqData'; // json导入数据类型 reqData reqParam reqHeader resData
   // $scope.currentAction = {}; // 当前接口信息
@@ -40,6 +90,9 @@ function apic($scope, $state, apiInfoService, $stateParams, $q, productService) 
       $scope.productVersions = productVersions;
     }
   };
+  $scope.tagChange = (tag) => {
+    $scope.tag = tag;
+  };
 
   function addProduct(productVersions) {
     for (var i = 0; i < $scope.productList.length; i += 1) {
@@ -67,6 +120,32 @@ function apic($scope, $state, apiInfoService, $stateParams, $q, productService) 
     }
     $scope.currentAction.products.push(productVersions);
   };
+  $scope.addTag = (tag) => {
+    if (!tag || tag.isExist) {
+      return;
+    }
+    if (!$scope.currentAction.tags) {
+      $scope.currentAction.tags = [];
+    }
+    if (!tag.isExist) {
+      $scope.currentAction.tags.push(tag);
+      tag.isExist = true;
+      $scope.tag = null;
+    }
+  };
+  $scope.rmTag = (id) => {
+    for (var i = 0; i < $scope.currentAction.tags.length; i += 1) {
+      if ($scope.currentAction.tags[i]._id === id) {
+        $scope.currentAction.tags[i].isExist = false;
+        $scope.currentAction.tags.splice(i, 1);
+      }
+    }
+    for (var i = 0; i < $scope.tagList.length; i += 1) {
+      if ($scope.tagList[i]._id === id) {
+        $scope.tagList[i].isExist = false;
+      }
+    }
+  };
   $scope.rmProduct = (productVersionsId) => {
     rmProduct(productVersionsId);
     for (var i = 0; i < $scope.currentAction.products.length; i += 1) {
@@ -78,6 +157,9 @@ function apic($scope, $state, apiInfoService, $stateParams, $q, productService) 
   // 初始化
   function init() {
     console.log('接口详情 初始化');
+    if (!projectId) {
+      return;
+    }
     // getPageList(projectId);
     // getActions(projectId);
     $q.all([apiInfoService.getPageByProjectId(projectId), apiInfoService.getActionsByProjectId(projectId)]).then((
@@ -101,9 +183,25 @@ function apic($scope, $state, apiInfoService, $stateParams, $q, productService) 
           }
         }
       }
+      getAllTag(); //获取所有的标签
       getAllProduct(); // 获取所有产品线
+      getAllProductAndVersion();
       if ($scope.currentAction) {
-        switchA($scope.currentAction.id);
+        $scope.currentAction = apiInfoService.switchA($scope.currentAction.id);
+        var productVersions = $scope.currentAction.products;
+        if (productVersions && productVersions.length > 0) {
+          productService.getAllProducts().then(products => {
+            for (var n = 0; n < productVersions.length; n++) {
+              for (var m = 0; m < products.length; m++) {
+                if (productVersions[n].product == products[m]._id) {
+                  productVersions[n].displayName = products[m].name + ' -> ' + productVersions[n].name;
+                }
+              }
+            }
+          }, error => {
+            alert(error);
+          });
+        }
         getFavourite(); // 获取订阅信息
         if (!$scope.currentAction.protocol) {
           $scope.currentAction.protocol = 'http';
@@ -133,6 +231,16 @@ function apic($scope, $state, apiInfoService, $stateParams, $q, productService) 
     for (var i = 0; i < $scope.currentAction.products.length; i += 1) {
       addProduct($scope.currentAction.products[i]);
     }
+    if ($scope.currentAction.tags) {
+      for (var i = 0; i < $scope.currentAction.tags.length; i += 1) {
+        for (var j = 0; j < $scope.tagList.length; j += 1) {
+          if ($scope.currentAction.tags[i]._id == $scope.tagList[j]._id) {
+            $scope.tagList[j].isExist = true;
+          }
+        }
+        $scope.currentAction.tags[i].isExist = true;
+      }
+    }
   }
   // 获取所有产品线
   function getAllProduct() {
@@ -145,6 +253,15 @@ function apic($scope, $state, apiInfoService, $stateParams, $q, productService) 
       // if (result && result.length > 0) {
       //   getAllVersion($scope.productList);
       // }
+    }, error => {
+      alert(error);
+    });
+  }
+  // 获取所有标签
+  function getAllTag() {
+    // 获取所有标签
+    tagService.getAll().then(result => {
+      $scope.tagList = result;
     }, error => {
       alert(error);
     });
@@ -235,12 +352,12 @@ function apic($scope, $state, apiInfoService, $stateParams, $q, productService) 
     $scope.currentAction.isChange = true;
     apiInfoService.addParam(type, $scope.currentAction.id, parentParamId, paramType);
     // $scope.currentAction = apiInfoService.getAction($scope.currentAction.id);
-    switchA($scope.currentAction.id);
+    $scope.currentAction = apiInfoService.switchA($scope.currentAction.id);
   };
   // 删除制定参数
   $scope.removeParam = (paramId, type) => {
     apiInfoService.removeParameter($scope.currentAction.id, paramId, type);
-    switchA($scope.currentAction.id);
+    $scope.currentAction = apiInfoService.switchA($scope.currentAction.id);
   };
   // 添加／修改 接口
   $scope.addAction = () => {
@@ -277,6 +394,12 @@ function apic($scope, $state, apiInfoService, $stateParams, $q, productService) 
     $scope.apiHistoryList = [];
     apiInfoService.getHistory($scope.currentAction.id).then(result => {
       $scope.apiHistoryList = result;
+      if ($scope.apiHistoryList) {
+        for (var i = 0; i < $scope.apiHistoryList.length; i++) {
+          var updateAt = $scope.apiHistoryList[i].updateAt;
+          moment.updateAt()
+        }
+      }
     }, err => {
       console.log('获取接口历史信息失败' + err);
     });
@@ -295,7 +418,7 @@ function apic($scope, $state, apiInfoService, $stateParams, $q, productService) 
     // watch();
     $scope.viewState = true;
     $scope.currentAction = apiInfoService.getAction(actionId);
-    switchA($scope.currentAction.id);
+    $scope.currentAction = apiInfoService.switchA($scope.currentAction.id);
     getFavourite();
     initActionProduct();
   };
@@ -319,7 +442,7 @@ function apic($scope, $state, apiInfoService, $stateParams, $q, productService) 
       alert(error);
     });
     console.log($scope.currentAction);
-    switchA($scope.currentAction.id);
+    $scope.currentAction = apiInfoService.switchA($scope.currentAction.id);
     console.log($scope.currentAction);
     // 保存接口
     // saveAc();
@@ -329,6 +452,29 @@ function apic($scope, $state, apiInfoService, $stateParams, $q, productService) 
     $scope.isEdit = false;
     $scope.chooseHisItem = historyId;
   };
+  // parameter 解析成层级结构modal
+  function parseParam(paramList, resultList) {
+    var pil = [];
+    var plist = paramList.parameterList;
+    if (!plist) {
+      return;
+    }
+    var pl = plist.length;
+    for (var i = 0; i < pl; i += 1) {
+      // parentsIdList.push(paramList.id);
+      // if (parentsIdList) {
+      //   for (var ppid in parentsIdList) {
+      //     pil.push(parentsIdList[ppid]);
+      //   }
+      // }
+      // pil.push(paramList.id);
+      // plist[i].parentsIdList = pil;
+      resultList.push(plist[i]);
+      if (plist[i].parameterList && plist[i].parameterList.length > 0) {
+        parseParam(plist[i], resultList, pil);
+      }
+    }
+  };
   // 预览历史纪录
   $scope.viewHistory = () => {
     const al = $scope.apiHistoryList.length;
@@ -337,6 +483,73 @@ function apic($scope, $state, apiInfoService, $stateParams, $q, productService) 
         $scope.apiHistoryList[i].id = $scope.apiHistoryList[i].apiId;
         $scope.viewState = false;
         $scope.currentAction = $scope.apiHistoryList[i];
+        if (!$scope.currentAction.requestParameter) {
+          $scope.currentAction.requestParameterList = [];
+        } else {
+          $scope.currentAction.requestParameterList = JSON.parse($scope.currentAction.requestParameter);
+        }
+        if (!$scope.currentAction.requestHeader) {
+          $scope.currentAction.requestHeaderList = [];
+        } else {
+          $scope.currentAction.requestHeaderList = JSON.parse($scope.currentAction.requestHeader);
+        }
+        if (!$scope.currentAction.requestData) {
+          $scope.currentAction.requestDataList = [];
+        } else {
+          $scope.currentAction.requestDataList = JSON.parse($scope.currentAction.requestData);
+        }
+        if (!$scope.currentAction.responseData) {
+          $scope.currentAction.responseDataList = [];
+        } else {
+          $scope.currentAction.responseDataList = JSON.parse($scope.currentAction.responseData);
+        }
+        var ca = $scope.currentAction;
+        var param = {};
+        // if (!param) {
+        //   param = {};
+        // }
+        param.requestParameter = [];
+        param.requestHeader = [];
+        param.requestData = [];
+        param.responseData = [];
+        if (ca === null) return null;
+        if (ca.requestParameterList) {
+          let rpl = ca.requestParameterList.length;
+          for (let i = 0; i < rpl; i += 1) {
+            ca.requestParameterList[i].parentsIdList = [];
+            param.requestParameter.push(ca.requestParameterList[i]);
+            parseParam(ca.requestParameterList[i], param.requestParameter, []);
+          }
+          // ca.requestParameterList = requestParameter;
+        }
+        if (ca.requestDataList) {
+          let rpl = ca.requestDataList.length;
+          for (let i = 0; i < rpl; i += 1) {
+            ca.requestDataList[i].parentsIdList = [];
+            param.requestData.push(ca.requestDataList[i]);
+            parseParam(ca.requestDataList[i], param.requestData, []);
+          }
+          // ca.requestDataList = requestData;
+        }
+        if (ca.requestHeaderList) {
+          let rpl = ca.requestHeaderList.length;
+          for (let i = 0; i < rpl; i += 1) {
+            ca.requestHeaderList[i].parentsIdList = [];
+            param.requestHeader.push(ca.requestHeaderList[i]);
+            parseParam(ca.requestHeaderList[i], param.requestHeader, []);
+          }
+          // ca.requestHeaderList = requestHeader;
+        }
+        if (ca.responseDataList) {
+          var rpl = ca.responseDataList.length;
+          for (let i = 0; i < rpl; i += 1) {
+            ca.responseDataList[i].parentsIdList = [];
+            param.responseData.push(ca.responseDataList[i]);
+            parseParam(ca.responseDataList[i], param.responseData, []);
+          }
+          // ca.responseDataList = responseData;
+        }
+        ca.param = param;
       }
     }
     $('#modal4').modal('hide');
@@ -363,7 +576,7 @@ function apic($scope, $state, apiInfoService, $stateParams, $q, productService) 
       // ele.value = '';
       processJSONImport(data);
       console.log(data);
-      switchA($scope.currentAction.id);
+      $scope.currentAction = apiInfoService.switchA($scope.currentAction.id);
       $('#modal1').modal('hide');
       // this.cancelImportJSON();
     } catch (e) {
@@ -384,103 +597,6 @@ function apic($scope, $state, apiInfoService, $stateParams, $q, productService) 
   //     sortParams(params[i].parameterList);
   //   }
   // }
-  // parameter 解析成层级结构modal
-  var parseParam = (paramList, resultList) => {
-    var pil = [];
-    var plist = paramList.parameterList;
-    if (!plist) {
-      return;
-    }
-    var pl = plist.length;
-    for (var i = 0; i < pl; i += 1) {
-      // parentsIdList.push(paramList.id);
-      // if (parentsIdList) {
-      //   for (var ppid in parentsIdList) {
-      //     pil.push(parentsIdList[ppid]);
-      //   }
-      // }
-      // pil.push(paramList.id);
-      // plist[i].parentsIdList = pil;
-      resultList.push(plist[i]);
-      if (plist[i].parameterList && plist[i].parameterList.length > 0) {
-        parseParam(plist[i], resultList, pil);
-      }
-    }
-  };
-  // 获取parameter转化成页面modal
-  var switchA = (actionId) => {
-    var ca = apiInfoService.getAction(actionId);
-    console.log(ca);
-    $scope.param = {};
-    $scope.param.requestParameter = [];
-    $scope.param.requestHeader = [];
-    $scope.param.requestData = [];
-    $scope.param.responseData = [];
-    if (ca === null) return;
-    if (ca.requestParameterList) {
-      let rpl = ca.requestParameterList.length;
-      for (let i = 0; i < rpl; i += 1) {
-        ca.requestParameterList[i].parentsIdList = [];
-        $scope.param.requestParameter.push(ca.requestParameterList[i]);
-        parseParam(ca.requestParameterList[i], $scope.param.requestParameter, []);
-      }
-      // ca.requestParameterList = requestParameter;
-    }
-    if (ca.requestDataList) {
-      let rpl = ca.requestDataList.length;
-      for (let i = 0; i < rpl; i += 1) {
-        ca.requestDataList[i].parentsIdList = [];
-        $scope.param.requestData.push(ca.requestDataList[i]);
-        parseParam(ca.requestDataList[i], $scope.param.requestData, []);
-      }
-      // ca.requestDataList = requestData;
-    }
-    if (ca.requestHeaderList) {
-      let rpl = ca.requestHeaderList.length;
-      for (let i = 0; i < rpl; i += 1) {
-        ca.requestHeaderList[i].parentsIdList = [];
-        $scope.param.requestHeader.push(ca.requestHeaderList[i]);
-        parseParam(ca.requestHeaderList[i], $scope.param.requestHeader, []);
-      }
-      // ca.requestHeaderList = requestHeader;
-    }
-    if (ca.responseDataList) {
-      var rpl = ca.responseDataList.length;
-      for (let i = 0; i < rpl; i += 1) {
-        ca.responseDataList[i].parentsIdList = [];
-        $scope.param.responseData.push(ca.responseDataList[i]);
-        parseParam(ca.responseDataList[i], $scope.param.responseData, []);
-      }
-      // ca.responseDataList = responseData;
-    }
-    $scope.currentAction = ca;
-    // console.log($scope.requestParam);
-    // setHash(actionId);
-    // if (!forceRefresh) {
-    //   if (!p.isActionInModule(actionId, _curModuleId)) {
-    //     console.error('invalid invoke: ws.switchA(', actionId, ",", forceRefresh, ")");
-    //     return;
-    //     *
-    //     var mid = p.getModuleIdByActionId(actionId);
-    //     if (mid !== undefined) {
-    //         ws.switchM(mid);
-    //     } else {
-    //         return;
-    //     }
-    //   }
-    // }
-    // getDiv(_curModuleId, "a").innerHTML = getAHtml(action);
-    // renderA();
-    // var last = b.g('div-a-tree-node-' + _curActionId);
-    // var cur = b.g('div-a-tree-node-' + actionId);
-    // if (last && b.dom.hasClass(last, 'cur')) {
-    //   b.dom.removeClass(last, 'cur');
-    // }
-    // if (cur && !b.dom.hasClass(cur, 'cur')) {
-    //   b.dom.addClass(cur, 'cur');
-    // }
-    // _curActionId = actionId;
-  };
   /**
    * process JSON import
    *
@@ -549,7 +665,10 @@ function apic($scope, $state, apiInfoService, $stateParams, $q, productService) 
           }
         }
         // process @order for import array data
-        if (typeof f2 in { number: undefined, boolean: undefined} && f.length > 1) {
+        if (typeof f2 in {
+            number: undefined
+            , boolean: undefined
+          } && f.length > 1) {
           mValues = [f2];
           for (i = 1; i < f.length; i += 1) {
             mValues.push(f[i]);
@@ -596,7 +715,10 @@ function apic($scope, $state, apiInfoService, $stateParams, $q, productService) 
         processJSONImport(f[key], key, notFirst ? id : null, true);
       });
     }
-    if (arrContext && typeof f in { number: undefined, boolean: undefined}) {
+    if (arrContext && typeof f in {
+        number: undefined
+        , boolean: undefined
+      }) {
       // process @order for import array data for array<object>
       mValues = [f];
       for (i = 1; i < arrContext.length; i += 1) {
@@ -612,3 +734,4 @@ function apic($scope, $state, apiInfoService, $stateParams, $q, productService) 
     }
   }
 }
+

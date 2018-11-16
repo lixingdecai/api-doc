@@ -1,9 +1,9 @@
 <div ng-include="'../template/_include/nav.html'" class="nav-header"></div>
 <div class="container" id="tagPage">
-    <div class="content-wrapper">
+    <div class="content-wrapper" style="min-height:0;">
         <div class="flash-container">
         </div>
-        <div class="container-fluid container-limited">
+        <div class="container-fluid container-limited" style="min-height:0;">
             <div class="content">
                 <div class="clearfix">
                     <div class="gray-content-block top-block">
@@ -16,7 +16,7 @@
                     <div class="labels">
                         <ul class="content-list manage-labels-list" ng-repeat="tag in tagList track by $index">
                             <li id="label_47">
-                                <a href="#"><span class="label color-label" style="background-color: #d9534f; color: #FFFFFF">{{tag.name}}</span></a>
+                               <span class="label color-label" style="background-color: #d9534f; color: #FFFFFF">{{tag.name}}</span>
                                 <div class="pull-right">
                                     <a class="btn btn-sm" ng-click="openEditModal(tag._id)" href="javascript:void(0);">编辑</a>
                                     <button class="btn btn-sm btn-remove remove-row" data-confirm="Remove this label? Are you sure?" data-method="delete" data-remote="true" ng-click="delete(tag._id)" rel="nofollow">删除</button>
@@ -28,6 +28,16 @@
             </div>
         </div>
     </div>
+    <div class="pagination pagination-small" id="pager" ng-if="page.totalPage != 0">
+            <ul class="pagination pagination-sm">
+                <li ng-click="changePage(1)" ng-class="{'disabled':page.currPage == 1}"><a>首页</a></li>
+                <li ng-click="changePage(page.currPage - 1)" ng-class="{'disabled':page.currPage == 1}"><a>上一页</a></li>
+                <li ng-click="changePage(showPage)" ng-class="{'active':showPage == page.currPage}" class="pageno" ng-repeat="showPage in page.showPages track by $index"><a>{{showPage}}</a></li>
+                <li ng-click="changePage(page.currPage + 1)" ng-class="{'disabled':page.currPage == page.totalPage}"><a>下一页</a></li>
+                <li ng-click="changePage(page.totalPage)" ng-class="{'disabled':page.currPage == page.totalPage}"><a>末页</a></li>
+                <li style="margin-top:3px;" class="disabled"><a>共{{page.totalPage}}页</a></li>
+            </ul>
+        </div>
 </div>
 <div id="modal1" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
     <div class="modal-dialog" role="document">
@@ -36,18 +46,27 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="exampleModalLabel">添加标签</h4>
             </div>
+             <form name="newTag_form" novalidate ng-submit="addTag()">
             <div class="modal-body">
-                <form>
                     <div class="form-group">
                         <label for="recipient-name" class="control-label">名称:</label>
-                        <input type="text" ng-model="newTag.name" class="form-control" id="recipient-name">
+                        <input type="text" name="name" ng-class="{'error':(newTag_form.name.$invalid && submitted)}" ng-model="newTag.name" dvalue="{{newTag.name}}" dname="tag" class="form-control" unique required>
                     </div>
-                </form>
+
+                    <div class="error" ng-show="(newTag_form.name.$dirty || newTag_form.name.$invalid ) && submitted">
+                        <small class="error" ng-show="newTag_form.name.$error.required">
+                        标签名必填
+                    </small>
+                        <small class="error" ng-show="newTag_form.name.$error.unique">该标签已经存在</small>
+                    </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                <button type="button" class="btn btn-primary" ng-click="addTag()">保存</button>
+                <button type="submit" class="btn btn-primary" ng-disabled="loading">
+                        <span class="glyphicon glyphicon-floppy-disk" ng-class="{'glyphicon-floppy-disk': !loading, 'glyphicon-refresh': loading,'glyphicon-refresh-animate': loading}"></span>保存
+                    </button>
             </div>
+             </form>
         </div>
     </div>
 </div>
@@ -58,20 +77,29 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="exampleModalLabel">编辑标签</h4>
             </div>
+            <form name="editTag_form" novalidate ng-submit="updateTag()">
             <div class="modal-body">
-                <form>
                 <input type="hidden" ng-model="editTag._id" class="form-control">
                 <input type="hidden" ng-model="editTag.user" class="form-control">
                     <div class="form-group">
                         <label for="recipient-name" class="control-label">名称:</label>
-                        <input type="text" ng-model="editTag.name" class="form-control" id="recipient-name">
+                         <input type="text" name="name" ng-class="{'error':(editTag_form.name.$invalid && submitted)}" ng-model="editTag.name" dirty="{{editTag_form.name.$dirty}}" dvalue="{{editTag.name}}" dname="tag" class="form-control" required unique>
                     </div>
-                </form>
+                    <div class="error" ng-show="(editTag_form.name.$dirty || editTag_form.name.$invalid ) && submitted">
+                        <small class="error" ng-show="editTag_form.name.$error.required">
+                        标签名称必填
+                    </small>
+                        <small class="error" ng-show="editTag_form.name.$error.unique">该标签名称已经存在</small>
+                    </div>
+                
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                <button type="button" class="btn btn-primary" ng-click="updateTag()">保存</button>
+                <button type="submit" class="btn btn-primary" ng-disabled="loading">
+                        <span class="glyphicon glyphicon-floppy-disk" ng-class="{'glyphicon-floppy-disk': !loading, 'glyphicon-refresh': loading,'glyphicon-refresh-animate': loading}"></span>保存
+                    </button>
             </div>
+            </form>
         </div>
     </div>
 </div>

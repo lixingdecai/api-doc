@@ -4,14 +4,15 @@
 // require('angular-moment');
 // require('angular-bootstrap-datetimepicker');
 const vimtAPP = angular.module('vimt', ['ui.router', 'ui.bootstrap.datetimepicker',
-  'start.controllers',
+  'start.controllers', 'utils',
   'apiList.controllers', 'apiList.services',
   'login.controllers', 'login.services',
   'project.controllers', 'project.services',
-  'apiInfo.controllers', 'apiInfo.services',
+  'apiInfo.controllers', 'addApi.controllers', 'apiInfo.services',
   'user.controllers', 'user.services',
   'product.controllers', 'product.services',
-  'tag.controllers', 'tag.services'
+  'tag.controllers', 'tag.services',
+  'mock.controllers', 'mock.services', 'ngTagsInput'
 ]);
 // vimtAPP.constant('moment', require('moment-timezone'));
 vimtAPP.run(['$rootScope', ($rootScope, $location, $state) => {
@@ -58,9 +59,13 @@ vimtAPP.config(['$stateProvider', '$urlRouterProvider', '$httpProvider', functio
     templateUrl: '../template/login/login.html',
     controller: 'loginCtrl'
   }).state('apiInfo', {
-    url: '/apiInfo/:projectId/:actionId',
+    url: '/apiInfo/:projectId/:actionId/:editFlag',
     templateUrl: '../template/interface/apiInfo.html',
     controller: 'apiInfoCtrl'
+  }).state('addApi', {
+    url: '/addApi',
+    templateUrl: '../template/interface/addApi.html',
+    controller: 'addApiCtrl'
   }).state('project', {
     url: '/project',
     templateUrl: '../template/project/project.html',
@@ -77,5 +82,9 @@ vimtAPP.config(['$stateProvider', '$urlRouterProvider', '$httpProvider', functio
     url: '/tag',
     templateUrl: '../template/tag/tag.html',
     controller: 'tagCtrl'
+  }).state('mock', {
+    url: '/mock/:apiId',
+    templateUrl: '../template/mock/mock.html',
+    controller: 'mockCtrl'
   });
 }]);

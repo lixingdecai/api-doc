@@ -26,7 +26,8 @@ const fields = {
   createBy: { type: Schema.Types.ObjectId, ref: 'User' },
   updateBy: { type: Schema.Types.ObjectId, ref: 'User' },
   createAt: Date,
-  updateAt: Date
+  updateAt: Date,
+  mark: {type: Number, default: 0}
 };
 
 const api = new Schema(fields);

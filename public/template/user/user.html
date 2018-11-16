@@ -20,6 +20,17 @@
       </tbody>
     </table>
 
+    <div class="pagination pagination-small" id="pager" ng-if="page.totalPage != 0">
+            <ul class="pagination pagination-sm">
+                <li ng-click="changePage(1)" ng-class="{'disabled':page.currPage == 1}"><a>首页</a></li>
+                <li ng-click="changePage(page.currPage - 1)" ng-class="{'disabled':page.currPage == 1}"><a>上一页</a></li>
+                <li ng-click="changePage(showPage)" ng-class="{'active':showPage == page.currPage}" class="pageno" ng-repeat="showPage in page.showPages track by $index"><a>{{showPage}}</a></li>
+                <li ng-click="changePage(page.currPage + 1)" ng-class="{'disabled':page.currPage == page.totalPage}"><a>下一页</a></li>
+                <li ng-click="changePage(page.totalPage)" ng-class="{'disabled':page.currPage == page.totalPage}"><a>末页</a></li>
+                <li style="margin-top:3px;" class="disabled"><a>共{{page.totalPage}}页</a></li>
+            </ul>
+        </div>
+
     <div id="modal1" class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -27,25 +38,52 @@
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title" id="exampleModalLabel">添加用户</h4>
       </div>
+      <form name="newUser_form" novalidate ng-submit="addUser()">
       <div class="modal-body">
-        <form>
+        
           <div class="form-group">
             <label for="recipient-name" class="control-label">用户名:</label>
-            <input type="text" ng-model="newUser.name" class="form-control" id="recipient-name">
+             <input type="text" name="name" ng-class="{'error':(newUser_form.name.$invalid && submitted)}" ng-model="newUser.name" dvalue="{{newUser.name}}" dname="user" class="form-control" unique required>
           </div>
+          <div class="error" ng-show="(newUser_form.name.$dirty || newUser_form.name.$invalid ) && submitted">
+                        <small class="error" ng-show="newUser_form.name.$error.required">
+                        用户名必填
+                    </small>
+                        <small class="error" ng-show="newUser_form.name.$error.unique">该用户名已经存在</small>
+                    </div>
           <div class="form-group">
             <label for="recipient-name" class="control-label">email:</label>
-            <input type="text" ng-model="newUser.email" class="form-control" id="recipient-name">
-          </div>
+
+            <input type="email" name="email" ng-class="{'error':(newUser_form.email.$invalid && submitted)}" ng-model="newUser.email" dvalue="{{newUser.email}}" dname="uemail" 
+            class="form-control"   unique required/>
+
+            
+          </div> 
+           <div class="error" ng-show="(newUser_form.email.$dirty || newUser_form.email.$invalid ) && submitted">
+                        <small class="error" ng-show="newUser_form.email.$error.required">
+                        email必填
+                    </small>
+                        <small class="error" ng-show="newUser_form.email.$error.unique">该email已经存在</small>
+                        <small class="error" ng-show="newUser_form.email.$error.email">邮箱格式不正确</small>
+                    </div>
           <div class="form-group">
             <label for="message-text" class="control-label">密码:</label>
-            <input class="form-control" ng-model="newUser.password" id="message-text">
+             <input type="password" name="password" ng-class="{'error':(newUser_form.password.$invalid && submitted)}" ng-model="newUser.password" dvalue="{{newUser.password}}" dname="user" class="form-control" required>
           </div>
-        </form>
+
+            <div class="error" ng-show="(newUser_form.password.$dirty || newUser_form.password.$invalid ) && submitted">
+                        <small class="error" ng-show="newUser_form.password.$error.required">
+                        密码必填
+                    </small>
+                    </div>
+        
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-        <button type="button" class="btn btn-primary" ng-click="addUser()">保存</button>
+        <button type="submit" class="btn btn-primary" ng-disabled="loading">
+                        <span class="glyphicon glyphicon-floppy-disk" ng-class="{'glyphicon-floppy-disk': !loading, 'glyphicon-refresh': loading,'glyphicon-refresh-animate': loading}"></span>保存
+                    </button>
       </div>
+      </form>
     </div>
 </div>

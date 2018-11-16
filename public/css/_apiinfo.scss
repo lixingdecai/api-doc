@@ -24,6 +24,8 @@
         cursor: pointer;
       }
     }
+
+    
     .page-items {
       padding-left: 15px;
       line-height: 15px;
@@ -55,6 +57,11 @@
       }
     }
   }
+
+  .api-top{
+      margin-top: 40px;
+    }
+
   .right-content {
     width: 895px;
     overflow-x: hidden;
@@ -84,11 +91,15 @@
       margin-top: 10px;
       clear: both;
 
+      .label{
+        margin-right: 15px;
+      }
+
       &:after {
         clear: both;
       }
       .item {
-        margin: 4px;
+        margin: 10px;
         font-size: 12px;
 
         b {

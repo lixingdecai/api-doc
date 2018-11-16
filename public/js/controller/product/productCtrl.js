@@ -6,7 +6,14 @@ angular.module('product.controllers', []).controller('productCtrl', function ($s
   $scope.versionList = [];
   $scope.showVersions = [];
   $scope.currIndex = 0;
-  getAll();
+  $scope.page = {
+    pageSize: 10
+    , currPage: 1
+    , totalCount: 0
+    , totalPage: 0
+    , showPages: []
+  , };
+  getPageList();
   $scope.showProducts = (index) => {
     var flag = $scope.showVersions[index];
     if (flag) {
@@ -16,14 +23,70 @@ angular.module('product.controllers', []).controller('productCtrl', function ($s
     }
   };
 
+  function setPageInfo() {
+    $scope.page.showStart = $scope.page.currPage - 5;
+    $scope.page.showEnd = $scope.page.currPage + 5;
+    if ($scope.page.showStart < 1) {
+      $scope.page.showStart = 1;
+    }
+    if ($scope.page.showEnd > $scope.page.totalPage) {
+      $scope.page.showEnd = $scope.page.totalPage;
+    }
+    $scope.page.showPages = [];
+    for (var i = $scope.page.showStart; i <= $scope.page.showEnd; i++) {
+      $scope.page.showPages.push(i);
+    }
+    if ($scope.page.totalPage > $scope.page.currPage && ($scope.page.currPage + 5 < $scope.page.totalPage)) {
+      $scope.page.showPages.push('...');
+    }
+  }
+  $scope.changePage = (currPage) => {
+    var patrn = /^\d*$/;
+    if (!patrn.test(currPage)) {
+      if (currPage == '...') {
+        currPage = $scope.page.currPage + 5;
+        if (currPage > $scope.page.totalPage) {
+          currPage = $scope.page.totalPage;
+        }
+      }
+    }
+    if (currPage > $scope.page.totalPage || currPage < 1) {
+      return;
+    }
+    $scope.page.currPage = currPage;
+    getPageList();
+  };
+
+  function getPageList() {
+    productService.pageList($scope.page).then(result => {
+      $scope.productList = result;
+    }, error => {
+      alert(error);
+    });
+    productService.totalCount().then(result => {
+      $scope.page.totalCount = result;
+      $scope.page.totalPage = Math.ceil($scope.page.totalCount / $scope.page.pageSize);
+      setPageInfo();
+    }, error => {
+      alert(error);
+    });
+  };
+
   function getAll() {
-    productService.getAllProducts().then(result => {
+    productService.pageList().then(result => {
+      var productt = result;
+    }, error => {
+      alert(error);
+    });
+    productService.totalCount();
+    productService.getPageListProducts().then(result => {
       $scope.productList = result;
     }, error => {
       alert(error);
     });
   };
-  $scope.openVersionModal = (id,index) => {
+  $scope.openVersionModal = (id, index) => {
+    $scope.submitted = false;
     $scope.currIndex = index;
     $scope.newVersion = {};
     $scope.newVersion.product = id;
@@ -31,8 +94,11 @@ angular.module('product.controllers', []).controller('productCtrl', function ($s
     $('#versionModal').modal('show');
   };
   $scope.editVersionModal = (id) => {
+    $scope.submitted = false;
+    //$scope.editVersion_form.name.$dirty = false;
     productService.getVersion(id).then(result => {
       $scope.editVersion = result;
+      $scope.oldName = $scope.editVersion.name;
     }, error => {
       alert(error);
     });
@@ -41,9 +107,32 @@ angular.module('product.controllers', []).controller('productCtrl', function ($s
   };
   $scope.openProductModal = () => {
     $scope.newProduct = {};
+    $scope.submitted = false;
     // $scope.newProduct = id;
     console.log('添加产品');
     $('#productModal').modal('show');
+  };
+  $scope.openEditProductModal = (id) => {
+    $scope.submitted = false;
+    productService.get(id).then(result => {
+      $scope.editProduct = result;
+    }, error => {
+      alert(error);
+    });
+    console.log('编辑标签');
+    $('#editproductModal').modal('show');
+  };
+  $scope.updateProduct = () => {
+    $scope.submitted = true;
+    if ($scope.editProduct_form.$valid) {
+      productService.update($scope.editProduct).then(result => {
+        console.log(result);
+        getPageList();
+        $('#editproductModal').modal('hide');
+      }, error => {
+        alert(error);
+      });
+    } else {}
   };
   $scope.delete = (id) => {
     if (!window.confirm('确定要删除该产品？')) {
@@ -64,7 +153,7 @@ angular.module('product.controllers', []).controller('productCtrl', function ($s
         }, error => {
           alert(error);
         });
-        getAll();
+        getPageList();
       }, error => {
         alert(error);
       });
@@ -80,38 +169,55 @@ angular.module('product.controllers', []).controller('productCtrl', function ($s
       $scope.delVersion = result;
       $scope.delVersion.mark = -1;
       productService.updateVersion($scope.delVersion);
-      getAll();
+      getPageList();
     }, error => {
       alert(error);
     });
   };
+  $scope.submitted = false;
+  $scope.loading = false;
   $scope.addProduct = () => {
-    productService.create($scope.newProduct).then(result => {
-      console.log(result);
-    }, error => {
-      alert(error);
-    });
-    getAll();
-    $('#productModal').modal('hide');
+    $scope.submitted = true;
+    $scope.loading = true;
+    if ($scope.newProduct_form.$valid) {
+      productService.create($scope.newProduct).then(result => {
+        $scope.loading = false;
+        getPageList();
+        $('#productModal').modal('hide');
+      }, error => {
+        alert(error);
+      });
+    } else {
+      $scope.loading = false;
+    }
   };
   $scope.addVersion = (index) => {
-    productService.createVersion($scope.newVersion).then(result => {
-      console.log(result);
-      $scope.showVersions[index] = true;
-    }, error => {
-      alert(error);
-    });
-    getAll();
-    $('#versionModal').modal('hide');
+    $scope.submitted = true;
+    $scope.loading = true;
+    if ($scope.newVersion_form.$valid) {
+      productService.createVersion($scope.newVersion).then(result => {
+        $scope.loading = false;
+        $scope.showVersions[index] = true;
+        getPageList();
+        $('#versionModal').modal('hide');
+      }, error => {
+        alert(error);
+      });
+    } else {
+      $scope.loading = false;
+    }
   };
   $scope.updateVersion = () => {
-    productService.updateVersion($scope.editVersion).then(result => {
-      console.log(result);
-    }, error => {
-      alert(error);
-    });
-    getAll();
-    $('#editversionModal').modal('hide');
+    $scope.submitted = true;
+    if ($scope.editVersion_form.$valid) {
+      productService.updateVersion($scope.editVersion).then(result => {
+        console.log(result);
+        getPageList();
+        $('#editversionModal').modal('hide');
+      }, error => {
+        alert(error);
+      });
+    } else {}
   };
   $scope.apiInfo = () => {
     console.log('跳转接口信息！');

@@ -20,6 +20,36 @@ exports.get = (req, res) => {
   }
   Tag.findById(id).then(tag => tools.responseSuccess(res, tag), err => tools.responseFailure(res, err));
 };
+
+exports.pageList = (req, res) => {
+  const pageSize = parseInt(req.params.pageSize);
+  const currPage = parseInt(req.params.currPage);
+  const skip = (currPage - 1) * pageSize;
+  Tag.find({
+    mark: 0
+  }).skip(skip).limit(pageSize).then(users => tools.responseSuccess(res, users), err => tools.responseFailure(res
+    , err));
+};
+exports.totalCount = (req, res) => {
+  var query = Tag.find({
+    mark: 0
+  });
+  query.count(function (err, count) {
+    tools.responseSuccess(res, count);
+  });
+};
+
+exports.getByName = (req, res) => {
+  const name = req.params.name;
+  if (!name) {
+    return tools.responseFailure(res, 'Invalid name');
+  }
+  Tag.find({'name': name,'mark': 0}).then(
+    tag => tools.responseSuccess(res, tag),
+    err => tools.responseFailure(res, err)
+  );
+};
+
 exports.getAll = (req, res) => {
   Tag.find({
     mark: 0

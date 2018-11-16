@@ -16,6 +16,36 @@ angular.module('tag.services', []).factory('tagService', ($http, $q) => {
     return promise;
   };
 
+  tagService.pageList = (page) => {
+    const deferred = $q.defer();
+    const promise = deferred.promise;
+    $http.get('/tagPageList/'+page.pageSize+'/'+page.currPage).success((data) => {
+      if (data.status === 'success') {
+        deferred.resolve(data.response);
+      } else {
+        deferred.reject(data.error);
+      }
+    }).error((error) => {
+      deferred.reject(error);
+    });
+    return promise;
+  };
+
+  tagService.totalCount = () => {
+    const deferred = $q.defer();
+    const promise = deferred.promise;
+    $http.get('/tagTotalCount').success((data) => {
+      if (data.status === 'success') {
+        deferred.resolve(data.response);
+      } else {
+        deferred.reject(data.error);
+      }
+    }).error((error) => {
+      deferred.reject(error);
+    });
+    return promise;
+  };
+
   tagService.get = (id) => {
     const deferred = $q.defer();
     const promise = deferred.promise;

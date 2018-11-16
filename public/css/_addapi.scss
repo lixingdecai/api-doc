@@ -1,0 +1,28 @@
+.remove-item {
+    display: block;
+    position: absolute;
+    width: 25px;
+    height: 22px;
+    right: 0;
+    top: 0;
+    background: url('//misc.360buyimg.com/product/search/1.0.0/css/i/search.ele.png') no-repeat 7px -140px;
+}
+
+.crumb-select-item {
+    position: relative;
+    float: left;
+    height: 22px;
+    line-height: 22px;
+    border: 1px solid #DDD;
+    font-size: 12px;
+    vertical-align: top;
+    margin: 0 5px 5px 0;
+    padding: 0 26px 0 4px;
+    cursor: pointer;
+    background: #f3f3f3;
+}
+
+.param-item h3{
+    font-size: 20px;
+}
+

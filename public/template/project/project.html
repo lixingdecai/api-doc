@@ -1,18 +1,17 @@
 <div ng-include="'../template/_include/nav.html'" class="nav-header"></div>
 <div class="container">
     <div class="box-con clearfix">
-        <div class="box" data-projid="6556" ng-click="apiInfo(project._id)" data-teamid="3142" ng-repeat="project in projectList track by $index">
-            <div class="info">
+        <div class="box" data-projid="6556"  data-teamid="3142" ng-repeat="project in projectList track by $index">
+            <div class="info" ng-click="apiInfo(project._id)">
                 <div class="title">{{project.name}}</div>
                 <div class="intro">{{project.domain}}</div>
                 <div class="intro">{{project.description}}</div>
             </div>
             <div class="status">1 周 前更新<span class="creator">@李姓的菜</span></div>
             <div class="tools">
-                <i class="glyphicon glyphicon-pencil" ></i>
-                <i class="glyphicon glyphicon-export"  title="复制RAP插件地址"></i>
-                <i class="glyphicon glyphicon-eye-open" ></i>
-                <i class="glyphicon glyphicon-trash" ></i>
+                <i ng-click="apiInfoEdit(project._id)" class="glyphicon glyphicon-pencil" ></i>
+                <i ng-click="apiInfo(project._id)" class="glyphicon glyphicon-eye-open" ></i>
+                <i ng-click="delete(project._id)" class="glyphicon glyphicon-trash" ></i>
             </div>
             <input type="hidden" class="accounts-hidden" value="">
         </div>

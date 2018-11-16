@@ -33,10 +33,23 @@ exports.init = app => {
   app.get('/checklogin', user.checklogin);
   app.post('/login', multipartMiddleware, user.login);
   app.get('/pages/:projectId', page.getAllByProjectId);
+  app.get('/checkUnique/product/:name', product.getByName);
+  app.get('/productPageList/:pageSize/:currPage', product.pageList);
+  app.get('/productTotalCount', product.totalCount);
+  app.get('/userPageList/:pageSize/:currPage', user.pageList);
+  app.get('/userTotalCount', user.totalCount);
+  app.get('/tagPageList/:pageSize/:currPage', tag.pageList);
+  app.get('/tagTotalCount', tag.totalCount);
+  app.get('/apiPageList/:pageSize/:currPage/:url/:title/:updateBegin/:updateEnd/:project/:products/:tags/:favourite'
+    , api.pageList);
+  app.get('/apiTotalCount/:url/:title/:updateBegin/:updateEnd/:project/:products/:tags/:favourite', api.totalCount);
+  app.get('/checkUnique/user/:name', user.getByName);
+  app.get('/checkUnique/uemail/:name', user.getByEmail);
+  app.get('/checkUnique/tag/:name', tag.getByName);
+  app.get('/checkUnique/version/:name', productVersion.getByNameAndProductId);
   app.get('/apis/:projectId', api.getAllByProjectId);
   app.get('/versions/:productId', productVersion.getAllByProductId);
   app.get('/apiHistory/:apiId', apiHistrory.findByApiId);
-
   // app.post('/logout', multipartMiddleware, user.logout);
   // app.get('/favourite/clean', favourite.clean);
   createRestfulApi(app, api);
@@ -49,3 +62,4 @@ exports.init = app => {
   createRestfulApi(app, productVersion);
   createRestfulApi(app, favourite);
 };
+
