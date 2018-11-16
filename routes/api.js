@@ -15,7 +15,7 @@ const transport = nodemailer.createTransport('SMTP', {
   , secureConnection: true
   , port: 465
   , auth: {
-    user: 'apidoc@linggan.com'
+    user: 'apidoc@my.com'
     , pass: 'Wp861121'
   }
 });
@@ -187,7 +187,7 @@ const sendUpdateMail = (id, title, _log, _to) => {
       }
     });
     const config = {
-      from: 'apidoc@linggan.com'
+      from: 'apidoc@my.com'
       , to: _to.email
       , cc: emails
       , subject: `${title} 更新通知`
